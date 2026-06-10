@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ashassul · Ficha</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --dark:#0e0e1c;--mid:#1a1a2e;
+  --accent:#7f77dd;--gold:#ef9f27;--green:#1d9e75;--red:#e24b4a;
+  --text:#e8e4f0;--muted:#7a7890;--sub:#b0adc8;
+  --card:rgba(255,255,255,0.038);--card2:rgba(255,255,255,0.06);
+  --border:rgba(127,119,221,0.18);--border2:rgba(127,119,221,0.32);
+  --snake:rgba(29,158,117,0.08);--snakeborder:rgba(29,158,117,0.3);
+  --r:12px;--r2:8px;
+}
+html,body{height:100%;background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;overflow:hidden;}
+.app{width:100%;height:100vh;max-width:480px;margin:0 auto;display:flex;flex-direction:column;}
+.hdr{background:linear-gradient(160deg,#1e1640,#2d1b4e 60%,#1a1a2e);padding:14px 16px 12px;flex-shrink:0;position:relative;}
+.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--accent) 30%,var(--gold) 70%,transparent);}
+.h-row{display:flex;align-items:flex-start;justify-content:space-between;}
+.h-name{font-size:22px;font-weight:600;letter-spacing:3px;color:#fff;}
+.h-sub{font-size:10px;color:#afa9ec;letter-spacing:3px;text-transform:uppercase;margin-top:1px;}
+.h-tags{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;}
+.tag{font-size:10px;padding:2px 8px;border-radius:20px;letter-spacing:.5px;}
+.tag.pu{background:rgba(127,119,221,0.15);border:.5px solid rgba(127,119,221,0.35);color:#c4c0f0;}
+.tag.go{background:rgba(239,159,39,0.12);border:.5px solid rgba(239,159,39,0.4);color:#fac775;}
+.tag.gr{background:rgba(29,158,117,0.12);border:.5px solid rgba(29,158,117,0.35);color:#5dcaa5;}
+.h-hp{text-align:right;cursor:pointer;}
+.h-hp-val{font-size:22px;font-weight:600;line-height:1;}
+.h-hp-val.ok{color:#5dcaa5;}.h-hp-val.low{color:var(--gold);}.h-hp-val.crit{color:var(--red);}
+.h-hp-lbl{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.h-hp-bar{width:60px;height:4px;border-radius:2px;background:rgba(255,255,255,0.1);margin-top:4px;overflow:hidden;}
+.h-hp-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;}
+.nav{display:flex;background:#0b0b18;border-bottom:.5px solid var(--border);flex-shrink:0;overflow-x:scroll;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;overscroll-behavior-x:contain;}
+.nav::-webkit-scrollbar{display:none;}
+.nav::after{content:'';flex:0 0 8px;}
+.nb{flex:0 0 auto;padding:9px 11px;font-size:10px;color:var(--muted);background:none;border:none;cursor:pointer;letter-spacing:.8px;text-transform:uppercase;border-bottom:2px solid transparent;transition:color .15s;white-space:nowrap;-webkit-appearance:none;}
+.nb.on{color:var(--accent);border-bottom-color:var(--accent);}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px 80px;}
+.tab{display:none;}.tab.on{display:block;}
+.sec{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:14px 0 7px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:'';flex:1;height:.5px;background:var(--border);}
+.card{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:11px 13px;}
+.card.hi{border-color:var(--border2);}
+.cl{font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;}
+.cv{font-size:22px;font-weight:600;color:#fff;line-height:1;}
+.cv.a{color:var(--accent);}.cv.g{color:var(--gold);}.cv.gr{color:#5dcaa5;}
+.cs{font-size:10px;color:var(--muted);margin-top:3px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:8px;}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px;}
+.stat{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:8px 6px;text-align:center;cursor:pointer;transition:border-color .15s;}
+.stat:active{background:var(--card2);}
+.stat.hi{border-color:rgba(127,119,221,0.45);background:rgba(127,119,221,0.07);}
+.stat-name{font-size:7px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:2px;}
+.stat-score{font-size:18px;font-weight:600;color:#fff;line-height:1;}
+.stat-mod{font-size:11px;color:var(--accent);}
+.hp-composer{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:8px;}
+.hpc-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.hpc-field{text-align:center;}
+.hpc-label{font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
+.hpc-input{width:100%;background:rgba(255,255,255,0.06);border:.5px solid var(--border2);border-radius:var(--r2);color:#fff;font-size:18px;font-weight:600;padding:8px 6px;text-align:center;outline:none;-webkit-appearance:none;}
+.hpc-input:focus{border-color:var(--accent);}
+.hpc-result{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);border-radius:var(--r2);padding:10px 14px;margin-bottom:8px;}
+.hpc-result-val{font-size:28px;font-weight:700;color:#5dcaa5;}
+.hpc-bar{height:6px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden;margin-bottom:10px;}
+.hpc-bar-fill{height:100%;border-radius:3px;transition:width .4s,background .3s;}
+.apply-btn{width:100%;background:rgba(127,119,221,0.18);border:.5px solid var(--border2);color:var(--accent);font-size:12px;padding:9px;border-radius:var(--r2);cursor:pointer;transition:background .15s;}
+.apply-btn:active{background:rgba(127,119,221,0.3);}
+.dmg-heal-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.dmg-btn{padding:10px;border-radius:var(--r2);font-size:13px;font-weight:600;cursor:pointer;border:.5px solid;}
+.dmg-btn.dmg{background:rgba(226,75,74,0.12);border-color:rgba(226,75,74,0.35);color:#f08080;}
+.dmg-btn.heal{background:rgba(29,158,117,0.12);border-color:rgba(29,158,117,0.35);color:#5dcaa5;}
+.quick-input{width:100%;background:rgba(255,255,255,0.05);border:.5px solid var(--border);border-radius:var(--r2);color:#fff;font-size:16px;padding:7px 10px;text-align:center;outline:none;margin-bottom:8px;-webkit-appearance:none;}
+.counter-card{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:12px 13px;margin-bottom:8px;}
+.counter-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.counter-title{font-size:13px;font-weight:500;color:#fff;}
+.counter-subtitle{font-size:10px;color:var(--muted);margin-top:2px;}
+.counter-reset{font-size:10px;color:var(--muted);background:rgba(255,255,255,0.05);border:.5px solid rgba(255,255,255,0.1);padding:3px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.pips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+.pip{width:32px;height:32px;border-radius:50%;border:.5px solid var(--border2);background:rgba(255,255,255,0.04);cursor:pointer;transition:background .15s,border-color .15s;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);}
+.pip.used{background:rgba(127,119,221,0.25);border-color:var(--accent);color:var(--accent);}
+.pip.snake-used{background:rgba(29,158,117,0.2);border-color:var(--green);color:#5dcaa5;}
+.pip.unlim{background:rgba(29,158,117,0.1);border-color:var(--snakeborder);color:#5dcaa5;font-size:9px;}
+.sl{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:8px;}
+.sl-head{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.sl-head::after{content:'';flex:1;height:.5px;background:var(--border);}
+.sr{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:.5px solid rgba(255,255,255,0.04);}
+.sr:last-child{border:none;}
+.sr-l{display:flex;align-items:center;gap:6px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.dot.e{background:transparent;border:.5px solid var(--muted);}
+.sname{font-size:12px;color:var(--sub);}.sname.p{color:var(--text);}
+.sbon{font-size:12px;font-weight:600;}
+.sbon.vhi{color:var(--gold);}.sbon.hi{color:var(--accent);}.sbon.lo{color:var(--muted);}
+.feat{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:11px 13px;margin-bottom:7px;}
+.feat.hi{border-color:rgba(127,119,221,0.4);}
+.feat.snake{border-color:var(--snakeborder);background:var(--snake);}
+.fhd{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.flv{width:22px;height:22px;border-radius:50%;background:rgba(127,119,221,0.18);border:.5px solid rgba(127,119,221,0.45);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--accent);font-weight:600;flex-shrink:0;}
+.fnm{font-size:13px;font-weight:500;color:#fff;}
+.fds{font-size:11px;color:var(--sub);line-height:1.55;}
+.fds.snake-c{color:#5dcaa5;}.fds.pu{color:#c4c0f0;}
+.sform{background:var(--snake);border:.5px solid var(--snakeborder);border-radius:var(--r);padding:11px 13px;margin-bottom:8px;}
+.sfnm{font-size:13px;font-weight:600;color:#5dcaa5;margin-bottom:6px;}
+.sfrow{display:flex;gap:14px;font-size:11px;margin-bottom:5px;}
+.sfrow span{color:var(--muted);}.sfrow b{color:#5dcaa5;}
+.sfst{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:6px 0;}
+.ss{text-align:center;background:rgba(255,255,255,0.03);border-radius:6px;padding:4px;}
+.ssl{font-size:8px;color:var(--muted);text-transform:uppercase;}
+.ssv{font-size:12px;color:#5dcaa5;font-weight:600;}
+.sfa{font-size:11px;color:var(--sub);line-height:1.5;padding-top:5px;border-top:.5px solid rgba(29,158,117,0.2);margin-top:4px;}
+.action-card{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:10px 13px;margin-bottom:7px;}
+.action-card.attack{border-left:2px solid var(--red);}
+.action-card.spell{border-left:2px solid var(--accent);}
+.ac-head{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.ac-name{font-size:13px;font-weight:500;color:#fff;flex:1;}
+.ac-type{font-size:10px;padding:2px 8px;border-radius:10px;}
+.ac-type.attack{background:rgba(226,75,74,0.15);color:#f08080;}
+.ac-type.spell{background:rgba(127,119,221,0.15);color:#c4c0f0;}
+.ac-lvl{font-size:10px;color:var(--muted);}
+.ac-meta{display:flex;gap:12px;font-size:11px;color:var(--sub);}
+.ac-meta span{color:var(--muted);}
+.ac-note{font-size:11px;color:var(--sub);margin-top:4px;line-height:1.5;}
+.inv-search{width:100%;background:rgba(255,255,255,0.04);border:.5px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:13px;padding:8px 12px;margin-bottom:8px;outline:none;}
+.inv-search:focus{border-color:var(--accent);}
+.inv-filters{display:flex;gap:5px;margin-bottom:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
+.inv-filters::-webkit-scrollbar{display:none;}
+.fb{flex:0 0 auto;background:var(--card);border:.5px solid var(--border);color:var(--muted);font-size:10px;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;}
+.fb.on{background:rgba(127,119,221,0.18);border-color:var(--accent);color:var(--accent);}
+.ii{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;cursor:pointer;}
+.ii:active{border-color:var(--border2);}
+.ii.magic{border-left:2px solid var(--gold);}
+.ii-top{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
+.ii-name{font-size:13px;font-weight:500;color:#fff;flex:1;}
+.ii-qty{font-size:11px;color:var(--muted);background:rgba(255,255,255,0.05);padding:1px 7px;border-radius:10px;}
+.mdot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.ii-tags{display:flex;gap:4px;flex-wrap:wrap;}
+.it{font-size:10px;padding:2px 7px;border-radius:10px;}
+.it.weapon{background:rgba(226,75,74,0.1);color:#f08080;}
+.it.armour{background:rgba(127,119,221,0.1);color:#c4c0f0;}
+.it.potion{background:rgba(29,158,117,0.1);color:#5dcaa5;}
+.it.alq{background:rgba(239,159,39,0.1);color:#fac775;}
+.it.tool{background:rgba(120,100,70,0.1);color:#c8b090;}
+.it.currency{background:rgba(239,159,39,0.08);color:#e8c870;}
+.it.food{background:rgba(80,160,80,0.1);color:#90c880;}
+.it.clothing{background:rgba(200,150,200,0.1);color:#d0a8d0;}
+.sp-bp{font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(29,158,117,0.1);color:#5dcaa5;}
+.sp-mn{font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(127,119,221,0.1);color:#afa9ec;}
+.sp-dr{font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(100,100,100,0.1);color:var(--muted);}
+.ii-note{font-size:10px;color:var(--muted);margin-top:3px;}
+.empty-state{text-align:center;padding:32px;color:var(--muted);font-size:13px;}
+.roll-area{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px;text-align:center;}
+.d-result{font-size:44px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:2px;}
+.d-label{font-size:11px;color:var(--muted);margin-bottom:12px;}
+.dice-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;}
+.dp{display:inline-flex;align-items:center;background:rgba(239,159,39,0.1);border:.5px solid rgba(239,159,39,0.35);color:#fac775;font-size:12px;font-weight:600;padding:6px 13px;border-radius:20px;cursor:pointer;user-select:none;}
+.dp:active{background:rgba(239,159,39,0.25);}
+.bg-b{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:8px;}
+.bg-t{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
+.bg-c{font-size:12px;color:var(--sub);line-height:1.65;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.modal{background:#171726;border-radius:18px 18px 0 0;width:100%;max-width:480px;padding:18px 16px 32px;max-height:88vh;overflow-y:auto;}
+.mhandle{width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 16px;}
+.mtitle{font-size:15px;font-weight:600;color:#fff;margin-bottom:14px;}
+.fg{margin-bottom:11px;}
+.fl{font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
+.fi{width:100%;background:rgba(255,255,255,0.06);border:.5px solid rgba(127,119,221,0.3);border-radius:var(--r2);color:#fff;font-size:14px;padding:9px 12px;outline:none;-webkit-appearance:none;}
+.fi:focus{border-color:var(--accent);}
+.fsel{width:100%;background:#1a1a2e;border:.5px solid rgba(127,119,221,0.3);border-radius:var(--r2);color:#fff;font-size:14px;padding:9px 12px;outline:none;-webkit-appearance:none;}
+.fsel:focus{border-color:var(--accent);}
+.fta{width:100%;background:rgba(255,255,255,0.06);border:.5px solid rgba(127,119,221,0.3);border-radius:var(--r2);color:#fff;font-size:13px;padding:9px 12px;outline:none;resize:none;min-height:70px;}
+.fta:focus{border-color:var(--accent);}
+.tog-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(255,255,255,0.04);border-radius:var(--r2);cursor:pointer;}
+.tog-lbl{font-size:13px;color:var(--text);}
+.tog{width:42px;height:24px;border-radius:12px;background:rgba(255,255,255,0.12);position:relative;transition:background .2s;flex-shrink:0;}
+.tog.on{background:var(--accent);}
+.tog::after{content:'';position:absolute;top:4px;left:4px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s;}
+.tog.on::after{left:22px;}
+.mbtns{display:flex;gap:7px;margin-top:14px;}
+.mb-save{flex:1;background:rgba(127,119,221,0.18);border:.5px solid var(--accent);color:var(--accent);font-size:13px;padding:11px;border-radius:var(--r2);cursor:pointer;}
+.mb-cancel{background:rgba(255,255,255,0.05);border:.5px solid rgba(255,255,255,0.1);color:var(--muted);font-size:13px;padding:11px 14px;border-radius:var(--r2);cursor:pointer;}
+.mb-del{background:rgba(226,75,74,0.1);border:.5px solid rgba(226,75,74,0.3);color:var(--red);font-size:13px;padding:11px 14px;border-radius:var(--r2);cursor:pointer;}
+.stat-edit-g{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.calc-prev{text-align:center;padding:10px;background:rgba(127,119,221,0.08);border-radius:var(--r2);margin-top:8px;font-size:12px;color:var(--sub);}
+.calc-prev b{color:var(--accent);}
+.fab{position:fixed;bottom:24px;right:16px;width:52px;height:52px;border-radius:50%;background:var(--accent);color:#fff;font-size:26px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(127,119,221,0.45);z-index:50;align-items:center;justify-content:center;display:none;transition:transform .15s;}
+.fab:active{transform:scale(.93);}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:#1e1e36;border:.5px solid var(--border2);color:var(--text);font-size:12px;padding:8px 16px;border-radius:20px;z-index:300;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.dh-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--border);}
+.dh-row:last-child{border:none;}
+/* COINS */
+.coins-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.coin-card{border-radius:var(--r);padding:10px 12px;cursor:pointer;transition:opacity .15s;}
+.coin-card.pc{background:rgba(140,80,40,0.15);border:.5px solid rgba(140,80,40,0.4);}
+.coin-card.pp{background:rgba(180,180,190,0.12);border:.5px solid rgba(180,180,190,0.35);}
+.coin-card.pe{background:rgba(100,160,80,0.12);border:.5px solid rgba(100,160,80,0.35);}
+.coin-card.po{background:rgba(239,159,39,0.12);border:.5px solid rgba(239,159,39,0.4);}
+.coin-card.pl{background:rgba(200,230,255,0.1);border:.5px solid rgba(200,230,255,0.3);}
+.coin-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.coin-card.pc .coin-label{color:#c87840;}
+.coin-card.pp .coin-label{color:#b0b0c0;}
+.coin-card.pe .coin-label{color:#64c050;}
+.coin-card.po .coin-label{color:var(--gold);}
+.coin-card.pl .coin-label{color:#a0d0f0;}
+.coin-input{width:100%;background:rgba(255,255,255,0.06);border:.5px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:18px;font-weight:700;padding:6px 8px;text-align:center;outline:none;-webkit-appearance:none;}
+.coin-input:focus{border-color:inherit;}
+.coin-sub{font-size:9px;color:var(--muted);margin-top:3px;text-align:center;}
+.converter-box{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:8px;}
+.conv-title{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.conv-title::after{content:'';flex:1;height:.5px;background:var(--border);}
+.conv-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.conv-in{flex:1;background:rgba(255,255,255,0.06);border:.5px solid var(--border2);border-radius:6px;color:#fff;font-size:15px;font-weight:600;padding:7px 10px;text-align:center;outline:none;-webkit-appearance:none;}
+.conv-in:focus{border-color:var(--accent);}
+.conv-sel{flex:0 0 auto;background:#1a1a2e;border:.5px solid var(--border2);border-radius:6px;color:var(--sub);font-size:11px;padding:7px 6px;outline:none;-webkit-appearance:none;}
+.conv-arrow{color:var(--accent);font-size:14px;flex-shrink:0;}
+.conv-result{flex:1;background:rgba(127,119,221,0.08);border:.5px solid var(--border);border-radius:6px;color:#fff;font-size:15px;font-weight:700;padding:7px 10px;text-align:center;color:var(--accent);}
+.conv-btn{background:rgba(127,119,221,0.18);border:.5px solid var(--border2);color:var(--accent);font-size:12px;padding:7px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+.total-po{background:rgba(239,159,39,0.08);border:.5px solid rgba(239,159,39,0.25);border-radius:var(--r);padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.total-po-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.total-po-val{font-size:16px;font-weight:700;color:var(--gold);}
+
+/* QUIMERA CARD */
+.qv-card{background:rgba(226,75,74,0.06);border:.5px solid rgba(226,75,74,0.35);border-radius:var(--r);padding:0;margin-bottom:7px;overflow:hidden;}
+.qv-head{display:flex;align-items:center;gap:8px;padding:11px 13px;cursor:pointer;user-select:none;}
+.qv-name{font-size:13px;font-weight:500;color:#fff;flex:1;}
+.qv-badge{font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(226,75,74,0.15);color:#f08080;}
+.qv-badge.magic{background:rgba(127,119,221,0.2);color:#c4c0f0;}
+.qv-chevron{font-size:11px;color:var(--muted);transition:transform .2s;flex-shrink:0;}
+.qv-chevron.open{transform:rotate(180deg);}
+.qv-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:0 13px 10px;}
+.qv-stat{background:rgba(255,255,255,0.04);border-radius:6px;padding:6px 8px;text-align:center;}
+.qv-stat-lbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.qv-stat-val{font-size:12px;font-weight:600;color:#fff;}
+.qv-body{display:none;padding:0 13px 13px;}
+.qv-body.open{display:block;}
+.qv-divider{height:.5px;background:rgba(226,75,74,0.2);margin-bottom:10px;}
+.qv-section{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:10px 0 6px;display:flex;align-items:center;gap:6px;}
+.qv-section::after{content:'';flex:1;height:.5px;background:rgba(255,255,255,0.06);}
+.qv-desc{font-size:11px;color:var(--sub);line-height:1.6;margin-bottom:8px;}
+.qv-desc b{color:var(--text);}
+.qv-charges-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.qv-charges-title{font-size:11px;color:var(--sub);}
+.qv-charges-reset{font-size:10px;color:var(--muted);background:rgba(255,255,255,0.05);border:.5px solid rgba(255,255,255,0.1);padding:3px 9px;border-radius:20px;cursor:pointer;}
+.qv-pips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.qv-pip{width:30px;height:30px;border-radius:50%;border:.5px solid rgba(226,75,74,0.35);background:rgba(255,255,255,0.04);cursor:pointer;transition:background .15s,border-color .15s;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);}
+.qv-pip.used{background:rgba(226,75,74,0.25);border-color:var(--red);color:#f08080;}
+.qv-pip.active{background:rgba(127,119,221,0.3);border-color:var(--accent);color:#c4c0f0;}
+.qv-active-row{display:flex;align-items:center;gap:8px;background:rgba(127,119,221,0.08);border:.5px solid rgba(127,119,221,0.2);border-radius:8px;padding:8px 10px;margin-bottom:8px;}
+.qv-active-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.qv-active-text{font-size:11px;color:#c4c0f0;flex:1;}
+.dmg-types{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.dt{font-size:10px;padding:4px 10px;border-radius:20px;cursor:pointer;border:.5px solid;transition:background .15s,transform .1s;user-select:none;}
+.dt:active{transform:scale(.95);}
+.dt.perf{background:rgba(180,100,100,0.1);border-color:rgba(180,100,100,0.35);color:#e0a0a0;}
+.dt.perf.sel{background:rgba(180,100,100,0.3);border-color:#e08080;color:#fff;}
+.dt.veneno{background:rgba(100,180,80,0.1);border-color:rgba(100,180,80,0.35);color:#90d070;}
+.dt.veneno.sel{background:rgba(100,180,80,0.3);border-color:#80d060;color:#fff;}
+.dt.fogo{background:rgba(220,120,40,0.1);border-color:rgba(220,120,40,0.35);color:#f09050;}
+.dt.fogo.sel{background:rgba(220,120,40,0.3);border-color:#f08030;color:#fff;}
+.dt.gelo{background:rgba(100,180,220,0.1);border-color:rgba(100,180,220,0.35);color:#80c8e8;}
+.dt.gelo.sel{background:rgba(100,180,220,0.3);border-color:#70c0e0;color:#fff;}
+.dt.radiante{background:rgba(240,220,80,0.1);border-color:rgba(240,220,80,0.35);color:#e8d060;}
+.dt.radiante.sel{background:rgba(240,220,80,0.3);border-color:#e0c840;color:#fff;}
+.dt.eletrico{background:rgba(180,140,240,0.1);border-color:rgba(180,140,240,0.35);color:#c8a8f0;}
+.dt.eletrico.sel{background:rgba(180,140,240,0.3);border-color:#b890e8;color:#fff;}
+.dt.acido{background:rgba(140,200,60,0.1);border-color:rgba(140,200,60,0.35);color:#a0d840;}
+.dt.acido.sel{background:rgba(140,200,60,0.3);border-color:#90cc30;color:#fff;}
+.dt.magico{background:rgba(127,119,221,0.1);border-color:rgba(127,119,221,0.35);color:#afa9ec;}
+.dt.magico.sel{background:rgba(127,119,221,0.3);border-color:var(--accent);color:#fff;}
+.qv-dmg-display{display:flex;align-items:center;gap:6px;margin-top:4px;}
+.qv-dmg-val{font-size:15px;font-weight:700;color:#fff;}
+.qv-dmg-type-pill{font-size:11px;padding:2px 10px;border-radius:20px;font-weight:500;}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="h-row">
+      <div><div class="h-name">ASHASSUL</div><div class="h-sub">Ladino · Nível 10 · Yuan-ti</div></div>
+      <div class="h-hp" onclick="goStats()">
+        <div class="h-hp-lbl">HP</div>
+        <div class="h-hp-val ok" id="hdr-hp">—</div>
+        <div class="h-hp-bar"><div class="h-hp-fill" id="hdr-fill"></div></div>
+      </div>
+    </div>
+    <div class="h-tags">
+      <span class="tag pu">Neutro/Mal</span><span class="tag pu">22 anos</span>
+      <span class="tag go">Prof +4</span><span class="tag gr">Imune Veneno</span>
+    </div>
+  </div>
+  <nav class="nav">
+    <button class="nb on" onclick="sw('stats',this)">Stats</button>
+    <button class="nb" onclick="sw('skills',this)">Skills</button>
+    <button class="nb" onclick="sw('class',this)">Classe</button>
+    <button class="nb" onclick="sw('forms',this)">Formas</button>
+    <button class="nb" onclick="sw('actions',this)">Ações</button>
+    <button class="nb" onclick="sw('inv',this)">Inventário</button>
+    <button class="nb" onclick="sw('coins',this)">💰 Moedas</button>
+    <button class="nb" onclick="sw('dice',this)">Dados</button>
+    <button class="nb" onclick="sw('bg',this)">BG</button>
+  </nav>
+  <div class="scroll">
+
+    <!-- STATS -->
+    <div id="tab-stats" class="tab on">
+      <div class="sec">Pontos de Vida</div>
+      <div class="hp-composer" id="hpc">
+        <div class="hpc-result">
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">HP Atual</div>
+            <div class="hpc-result-val" id="hp-display">—</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:10px;color:var(--muted);">Máx <span id="hp-max-d" style="color:var(--sub);font-weight:600;">—</span></div>
+            <div style="font-size:10px;color:var(--muted);">Temp <span id="hp-temp-d" style="color:#5dcaa5;font-weight:600;">—</span></div>
+          </div>
+        </div>
+        <div class="hpc-bar"><div class="hpc-bar-fill" id="hpbar"></div></div>
+        <div class="hpc-row">
+          <div class="hpc-field"><div class="hpc-label">HP Máx</div><input class="hpc-input" type="number" id="in-hpmax" min="1" oninput="calcHP()"></div>
+          <div class="hpc-field"><div class="hpc-label">Dano Total</div><input class="hpc-input" type="number" id="in-dmg" min="0" placeholder="0" oninput="calcHP()"></div>
+          <div class="hpc-field"><div class="hpc-label">Temp HP</div><input class="hpc-input" type="number" id="in-temp" min="0" placeholder="0" oninput="calcHP()"></div>
+        </div>
+        <div class="dmg-heal-row">
+          <button class="dmg-btn dmg" onclick="qDH(-1)">− Dano</button>
+          <button class="dmg-btn heal" onclick="qDH(1)">+ Cura</button>
+        </div>
+        <input class="quick-input" type="number" id="quick-val" placeholder="Valor">
+        <button class="apply-btn" onclick="saveHP()">Salvar HP</button>
+      </div>
+      <div class="sec">Combate</div>
+      <div class="g3">
+        <div class="card hi" onclick="openSE('ca')"><div class="cl">CA</div><div class="cv a" id="d-ca">—</div><div class="cs" id="d-ca-s">toque p/ editar</div></div>
+        <div class="card hi" onclick="openSE('init')"><div class="cl">Iniciativa</div><div class="cv g" id="d-init">—</div><div class="cs">DEX+bônus</div></div>
+        <div class="card"><div class="cl">Atq.Furtivo</div><div class="cv g">5d6</div><div class="cs">1×/turno</div></div>
+      </div>
+      <div class="g4">
+        <div class="card"><div class="cl">Walk</div><div style="font-size:14px;font-weight:600;color:#fff;">15m</div></div>
+        <div class="card"><div class="cl">Climb</div><div style="font-size:14px;font-weight:600;color:#5dcaa5;">15m</div></div>
+        <div class="card"><div class="cl">Sp.Atk</div><div style="font-size:14px;font-weight:600;" class="cv a" id="d-spatk">—</div></div>
+        <div class="card"><div class="cl">Sp.DC</div><div style="font-size:14px;font-weight:600;" class="cv a" id="d-spdc">—</div></div>
+      </div>
+      <div class="sec">Atributos <span style="font-size:9px;font-weight:400;color:var(--muted);">(toque p/ editar)</span></div>
+      <div class="stat-grid" id="stat-grid"></div>
+      <div class="sec">Sentidos</div>
+      <div class="card" style="margin-bottom:8px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;">
+          <div style="color:var(--sub);">Percepção Pass. <span id="s-pp" style="float:right;color:#fff;font-weight:600;"></span></div>
+          <div style="color:var(--sub);">Visão Escura <span style="float:right;color:#5dcaa5;font-weight:600;">18m</span></div>
+          <div style="color:var(--sub);">Insight Pass. <span style="float:right;color:#fff;font-weight:600;">14</span></div>
+          <div style="color:var(--sub);">Investig. Pass. <span style="float:right;color:#fff;font-weight:600;">11</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div id="tab-skills" class="tab">
+      <div class="sl">
+        <div class="sl-head">Resistências</div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Força</span></div><span class="sbon lo">+0</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot"></span><span class="sname p">Destreza</span></div><span class="sbon hi">+9</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Constituição</span></div><span class="sbon lo">+0</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot"></span><span class="sname p">Inteligência</span></div><span class="sbon hi">+6</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Sabedoria</span></div><span class="sbon lo">+1</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Carisma</span></div><span class="sbon lo">+1</span></div>
+      </div>
+      <div class="sl">
+        <div class="sl-head">Perícias</div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Atletismo</span></div><span class="sbon lo">+0</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot"></span><span class="sname p">Acrobacia</span></div><span class="sbon hi">+9</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot"></span><span class="sname p">Prestidigitação</span></div><span class="sbon vhi">+13</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot"></span><span class="sname p">Furtividade</span></div><span class="sbon vhi">+13</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Arcanismo</span></div><span class="sbon lo">+2</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">História</span></div><span class="sbon lo">+2</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot"></span><span class="sname p">Investigação</span></div><span class="sbon vhi">+10</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Natureza</span></div><span class="sbon lo">+2</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Religião</span></div><span class="sbon lo">+2</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Intuição</span></div><span class="sbon lo">+1</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Medicina</span></div><span class="sbon lo">+1</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot"></span><span class="sname p">Percepção</span></div><span class="sbon vhi">+9</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot"></span><span class="sname p">Sobrevivência</span></div><span class="sbon hi">+5</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Enganação</span></div><span class="sbon lo">+1</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Intimidação</span></div><span class="sbon lo">+1</span></div>
+        <div class="sr"><div class="sr-l"><span class="dot e"></span><span class="sname">Persuasão</span></div><span class="sbon lo">+1</span></div>
+      </div>
+      <div class="sec">Proficiências</div>
+      <div class="bg-b"><div style="font-size:11px;color:var(--sub);line-height:2;">
+        <div><span style="color:var(--muted);">Armadura</span> · Light armor</div>
+        <div><span style="color:var(--muted);">Armas</span> · Armas de fogo, Arcos, Espadas, Bestas, Simples</div>
+        <div><span style="color:var(--muted);">Ferramentas</span> · Xadrez do Dragão, Ferramentas de Ladrão</div>
+        <div><span style="color:var(--muted);">Idiomas</span> · Sécklico, Gayleano, Élfico, Anão, Gíria de Ladrão</div>
+      </div></div>
+    </div>
+
+    <!-- CLASSE -->
+    <div id="tab-class" class="tab">
+      <div class="sec">Habilidades de Classe</div>
+      <div class="feat hi"><div class="fhd"><div class="flv">1</div><div class="fnm">Ataque Furtivo</div></div><div class="fds">1×/turno — <span style="color:var(--gold)">5d6</span> extra com arma finesse/distância quando tem vantagem ou aliado adjacente.</div></div>
+      <div class="feat"><div class="fhd"><div class="flv">2</div><div class="fnm">Ação Ardilosa</div></div><div class="fds">Ação bônus para Disparar, Desengajar ou Esconder-se a cada turno.</div></div>
+      <div class="feat"><div class="fhd"><div class="flv">3</div><div class="fnm">Caract. de Arquétipo</div></div><div class="fds pu">Ação bônus extra · Escalada sem penalidade · Dobro de distância de salto · Mira firme</div></div>
+      <div class="feat"><div class="fhd"><div class="flv">5</div><div class="fnm">Esquiva Sobrenatural</div></div><div class="fds">Reação para reduzir à metade o dano de um ataque que você pode ver.</div></div>
+      <div class="feat"><div class="fhd"><div class="flv">7</div><div class="fnm">Evasão</div></div><div class="fds">Save DEX: sucesso = 0 dano, falha = metade.</div></div>
+      <div class="feat"><div class="fhd"><div class="flv">9</div><div class="fnm">Arquétipo + Atleta</div></div><div class="fds pu">+3m movimento · Levantar em 1 quad · Sem desvant. em atqs à distância · Ignora cobertura leve/¾ · Modo Poderoso: -5 ataque → +10 dano</div></div>
+      <div class="sec">Talento</div>
+      <div class="feat"><div class="fhd"><div class="flv" style="font-size:7px;">BG</div><div class="fnm">Alerta (Azarado)</div></div><div class="fds">+5 iniciativa · Não surpreendido · Sem vantagem de criaturas ocultas.<br><span style="color:var(--gold);">Todo dia: 1d6 — 6=sorte imensa, 1-2=azar terrível.</span></div></div>
+      <div class="sec">Traços Raciais Yuan-ti</div>
+      <div class="counter-card" style="border-color:var(--snakeborder);background:var(--snake);">
+        <div class="counter-head">
+          <div><div class="counter-title" style="color:#5dcaa5;">Conjuração Inata</div><div class="counter-subtitle">CD 12 · Componentes: V, S</div></div>
+          <button class="counter-reset" onclick="resetConj()" style="color:#5dcaa5;border-color:var(--snakeborder);">Desc. Longo</button>
+        </div>
+        <div style="margin-bottom:10px;">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:5px;">AMIZADE ANIMAL (cobras) — à vontade</div>
+          <div class="pips"><div class="pip unlim">∞</div></div>
+        </div>
+        <div style="margin-bottom:10px;">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:5px;">SPRAY DE VENENO — 3/dia</div>
+          <div class="pips" id="pips-spray"></div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--muted);margin-bottom:5px;">SUGESTÃO — 3/dia</div>
+          <div class="pips" id="pips-sug"></div>
+        </div>
+      </div>
+      <div class="feat snake"><div class="fnm fds snake-c" style="margin-bottom:5px;">Resistência à Magia</div><div class="fds">Vantagem em saves contra magias e efeitos mágicos.</div></div>
+      <div class="feat snake"><div class="fnm fds snake-c" style="margin-bottom:4px;">Imunidade a Venenos</div><div class="fds">Imune a dano de veneno e à condição envenenado.</div></div>
+      <div class="sec">Mãos Rápidas</div>
+      <div class="feat"><div class="fds">Usa ação bônus da Ação Ardilosa para: Prestidigitação, ferramentas de ladrão, ou Usar Objeto.</div></div>
+    </div>
+
+    <!-- FORMAS -->
+    <div id="tab-forms" class="tab">
+      <div class="counter-card">
+        <div class="counter-head">
+          <div><div class="counter-title">Formas de Cobra</div><div class="counter-subtitle">3 transformações / Descanso Longo</div></div>
+          <button class="counter-reset" onclick="resetTrans()">Desc. Longo</button>
+        </div>
+        <div class="pips" id="pips-trans"></div>
+      </div>
+      <div class="sec">Formas Disponíveis</div>
+      <div class="sform"><div class="sfnm">Cobra Voadora</div><div class="sfrow"><span>CA</span><b>14</b><span>HP</span><b>5</b><span>Desloc.</span><b>18m voo</b></div><div class="sfst"><div class="ss"><div class="ssl">FOR</div><div class="ssv">4(-1)</div></div><div class="ss"><div class="ssl">DES</div><div class="ssv">18(+4)</div></div><div class="ss"><div class="ssl">CON</div><div class="ssv">11(+0)</div></div></div><div class="sfa"><b>Sobrevoo:</b> sem atqs de oportunidade.<br><b>Mordida:</b> +6 · 1,5m · 1perf + 7(3d4) veneno.</div></div>
+      <div class="sform"><div class="sfnm">Cobra Constritora</div><div class="sfrow"><span>CA</span><b>12</b><span>HP</span><b>13</b><span>Desloc.</span><b>18m</b></div><div class="sfst"><div class="ss"><div class="ssl">FOR</div><div class="ssv">15(+2)</div></div><div class="ss"><div class="ssl">DES</div><div class="ssv">14(+2)</div></div><div class="ss"><div class="ssl">CON</div><div class="ssv">12(+1)</div></div></div><div class="sfa"><b>Mordida:</b> +4 · 5(1d6+2) perf.<br><b>Constranger:</b> +4 · 6(1d8+2) cont + agarrado CD14.</div></div>
+      <div class="sform"><div class="sfnm">Cobra Venenosa</div><div class="sfrow"><span>CA</span><b>13</b><span>HP</span><b>2</b><span>Desloc.</span><b>18m</b></div><div class="sfst"><div class="ss"><div class="ssl">DES</div><div class="ssv">16(+3)</div></div><div class="ss"><div class="ssl">FOR</div><div class="ssv">2(-4)</div></div><div class="ss"><div class="ssl">CON</div><div class="ssv">11(+0)</div></div></div><div class="sfa"><b>Mordida:</b> +5 · 1perf · Save CON CD10 ou 5(2d4) veneno.</div></div>
+      <div class="sform"><div class="sfnm">Cobra Constritora Gigante</div><div class="sfrow"><span>CA</span><b>12</b><span>HP</span><b>60</b><span>Desloc.</span><b>18m</b></div><div class="sfst"><div class="ss"><div class="ssl">FOR</div><div class="ssv">19(+4)</div></div><div class="ss"><div class="ssl">DES</div><div class="ssv">14(+2)</div></div><div class="ss"><div class="ssl">CON</div><div class="ssv">12(+1)</div></div></div><div class="sfa"><b>Mordida:</b> +6 · 3m · 11(2d6+4) perf.<br><b>Constranger:</b> +6 · 13(2d8+4) cont + agarrado CD16.</div></div>
+      <div class="sform"><div class="sfnm">Cobra Venenosa Gigante</div><div class="sfrow"><span>CA</span><b>14</b><span>HP</span><b>11</b><span>Desloc.</span><b>30m</b></div><div class="sfst"><div class="ss"><div class="ssl">DES</div><div class="ssv">18(+4)</div></div><div class="ss"><div class="ssl">CON</div><div class="ssv">13(+1)</div></div><div class="ss"><div class="ssl">FOR</div><div class="ssv">10(+0)</div></div></div><div class="sfa"><b>Mordida:</b> +6 · 3m · 6(1d4+4) perf · Save CON CD11 ou 10(3d6) veneno.</div></div>
+    </div>
+
+    <!-- AÇÕES -->
+    <div id="tab-actions" class="tab">
+      <div class="sec">Ações & Magias</div>
+      <!-- QUIMERA VENENOSA -->
+      <div class="qv-card" id="qv-card">
+        <div class="qv-head" onclick="toggleQV()">
+          <div class="qv-name">Quimera Venenosa</div>
+          <span class="qv-badge" id="qv-type-badge">⚔️ Perfurante</span>
+          <span class="qv-badge magic" id="qv-magic-badge" style="display:none;">✦ Mágico Ativo</span>
+          <span class="ac-lvl" style="margin-left:4px;">+1</span>
+          <span class="qv-chevron" id="qv-chevron">▼</span>
+        </div>
+        <div class="qv-stats">
+          <div class="qv-stat"><div class="qv-stat-lbl">Dano</div><div class="qv-stat-val" id="qv-dmg-stat">1d10+1</div></div>
+          <div class="qv-stat"><div class="qv-stat-lbl">Alcance</div><div class="qv-stat-val">9/27m</div></div>
+          <div class="qv-stat"><div class="qv-stat-lbl">Cargas</div><div class="qv-stat-val" id="qv-charge-stat">4/4</div></div>
+        </div>
+        <div class="qv-body" id="qv-body">
+          <div class="qv-divider"></div>
+
+          <div class="qv-section">Cargas Mágicas</div>
+          <div id="qv-active-banner" style="display:none;">
+            <div class="qv-active-row">
+              <div class="qv-active-dot"></div>
+              <div class="qv-active-text">Modo mágico ativo — <span id="qv-active-type">Perfurante Mágico</span> · Recarga automática · Sem consumo de munição</div>
+            </div>
+          </div>
+          <div class="qv-charges-row">
+            <div class="qv-charges-title">Cargas (<span id="qv-charges-left">4</span>/<span id="qv-charges-max">4</span>) · Recarrega ao amanhecer</div>
+            <button class="qv-charges-reset" onclick="resetQVCharges()">Amanhecer</button>
+          </div>
+          <div class="qv-pips" id="qv-pips"></div>
+
+          <div class="qv-section">Tipo de Dano Ativo</div>
+          <div class="dmg-types" id="qv-dmg-types">
+            <span class="dt perf sel" onclick="selDmg(this,'perf','⚔️ Perfurante')">⚔️ Perfurante</span>
+            <span class="dt magico" onclick="selDmg(this,'magico','✦ Mágico Perf.')">✦ Mágico Perf.</span>
+            <span class="dt veneno" onclick="selDmg(this,'veneno','☠️ Veneno')">☠️ Veneno</span>
+            <span class="dt fogo" onclick="selDmg(this,'fogo','🔥 Fogo')">🔥 Fogo</span>
+            <span class="dt gelo" onclick="selDmg(this,'gelo','❄️ Gelo')">❄️ Gelo</span>
+            <span class="dt radiante" onclick="selDmg(this,'radiante','☀️ Radiante')">☀️ Radiante</span>
+            <span class="dt eletrico" onclick="selDmg(this,'eletrico','⚡ Elétrico')">⚡ Elétrico</span>
+            <span class="dt acido" onclick="selDmg(this,'acido','🧪 Ácido')">🧪 Ácido</span>
+          </div>
+          <div class="qv-dmg-display">
+            <div class="qv-dmg-val" id="qv-dmg-full">1d10+1</div>
+            <div class="qv-dmg-type-pill" id="qv-dmg-pill" style="background:rgba(180,100,100,0.2);border:.5px solid rgba(180,100,100,0.5);color:#e0a0a0;">⚔️ Perfurante</div>
+          </div>
+
+          <div class="qv-section">Descrição</div>
+          <div class="qv-desc">
+            Pistola gnômica fabricada pelos artesãos da <b>Floresta de Syvarion</b>, continente de Sécklos. Ganha por Ashassul em uma aposta no <b>Deserto de Fuhuk</b>, a caminho de Gaylen.<br><br>
+            <b>+1</b> nas rolagens de ataque e dano · <b>1d10+1</b> dano perfurante · Alcance <b>9m / 27m</b><br><br>
+            Com uma <b>ação bônus</b>, ativa uma carga mágica por 1 minuto: tipo de dano alterado, recarga automática e sem consumo de munição.<br><br>
+            Número de cargas = bônus de proficiência do usuário (<b>+4</b> = 4 cargas). Recarrega ao amanhecer.
+          </div>
+        </div>
+      </div>
+      <div class="action-card spell"><div class="ac-head"><div class="ac-name">Forma de Cobra</div><span class="ac-type spell">Spell</span><span class="ac-lvl">Lv 1</span></div><div class="ac-note">Transformação — veja aba Formas. Usa contador 3/Desc. Longo.</div></div>
+      <div class="action-card spell"><div class="ac-head"><div class="ac-name">Convocar Morto Vivo</div><span class="ac-type spell">Spell</span><span class="ac-lvl">Lv 1</span></div><div class="ac-note">Convoca morto-vivo para serviço temporário.</div></div>
+      <div class="action-card spell"><div class="ac-head"><div class="ac-name">Spray de Veneno</div><span class="ac-type spell">Spell</span></div><div class="ac-meta"><span>CD:</span>12 · <span>Alcance:</span>3m · <span>Limite:</span>3/dia</div><div class="ac-note">Cone de veneno — save CON CD12 ou 2d8 veneno. Contador em Classe.</div></div>
+      <div class="action-card spell"><div class="ac-head"><div class="ac-name">Animal Friendship</div><span class="ac-type spell">Spell</span></div><div class="ac-meta"><span>Alvo:</span>Cobras · <span>Limite:</span>à vontade</div><div class="ac-note">Encanta cobras · CD12 · Duração: 24h · Inata Yuan-ti.</div></div>
+      <div class="action-card spell"><div class="ac-head"><div class="ac-name">Sugestão</div><span class="ac-type spell">Spell</span></div><div class="ac-meta"><span>CD:</span>12 · <span>Dur.:</span>8h · <span>Limite:</span>3/dia</div><div class="ac-note">Curso de ação razoável — save SAB CD12. Contador em Classe.</div></div>
+    </div>
+
+    <!-- INVENTÁRIO -->
+    <div id="tab-inv" class="tab">
+      <input class="inv-search" type="text" placeholder="Buscar item..." id="inv-search" oninput="renderInv()">
+      <div class="inv-filters">
+        <button class="fb on" onclick="setFilt('all',this)">Todos</button>
+        <button class="fb" onclick="setFilt('Weapon',this)">⚔️ Armas</button>
+        <button class="fb" onclick="setFilt('Armour',this)">🛡️ Armadura</button>
+        <button class="fb" onclick="setFilt('Potions/poisons',this)">🧪 Poções</button>
+        <button class="fb" onclick="setFilt('Alquimia',this)">⚗️ Alquimia</button>
+        <button class="fb" onclick="setFilt('Tool',this)">🔧 Ferr.</button>
+        <button class="fb" onclick="setFilt('Trading/Currency',this)">💎 Moedas</button>
+        <button class="fb" onclick="setFilt('magic',this)">✦ Mágico</button>
+      </div>
+      <div id="inv-list"></div>
+    </div>
+
+    <!-- MOEDAS -->
+    <div id="tab-coins" class="tab">
+      <div class="sec">Carteira</div>
+      <div class="coins-grid">
+        <div class="coin-card pc"><div class="coin-label">PC · Cobre</div><input class="coin-input" type="number" id="c-pc" value="0" min="0" oninput="saveCoin("pc",this.value);calcTotal()"><div class="coin-sub">10 PC = 1 PP</div></div>
+        <div class="coin-card pp"><div class="coin-label">PP · Prata</div><input class="coin-input" type="number" id="c-pp" value="0" min="0" oninput="saveCoin("pp",this.value);calcTotal()"><div class="coin-sub">10 PP = 1 PE</div></div>
+        <div class="coin-card pe"><div class="coin-label">PE · Electrum</div><input class="coin-input" type="number" id="c-pe" value="0" min="0" oninput="saveCoin("pe",this.value);calcTotal()"><div class="coin-sub">10 PE = 1 PO</div></div>
+        <div class="coin-card po"><div class="coin-label">PO · Ouro</div><input class="coin-input" type="number" id="c-po" value="0" min="0" oninput="saveCoin("po",this.value);calcTotal()"><div class="coin-sub">10 PO = 1 PL</div></div>
+      </div>
+      <div class="coins-grid" style="grid-template-columns:1fr;">
+        <div class="coin-card pl"><div class="coin-label">PL · Platina</div><input class="coin-input" type="number" id="c-pl" value="0" min="0" oninput="saveCoin("pl",this.value);calcTotal()"><div class="coin-sub">1 PL = 10 PO = 100 PE = 1.000 PP = 10.000 PC</div></div>
+      </div>
+      <div class="total-po"><div><div class="total-po-label">Total em Peças de Ouro</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">PL×1000 + PO×10 + PE + PP÷10 + PC÷100 (via PP)</div></div><div class="total-po-val" id="total-po">0 PO</div></div>
+
+      <div class="converter-box">
+        <div class="conv-title">Conversor</div>
+        <div class="conv-row">
+          <input class="conv-in" type="number" id="conv-amt" placeholder="100" oninput="runConv()">
+          <select class="conv-sel" id="conv-from" onchange="runConv()">
+            <option value="pc">PC</option>
+            <option value="pp">PP</option>
+            <option value="pe">PE</option>
+            <option value="po" selected>PO</option>
+            <option value="pl">PL</option>
+          </select>
+          <span class="conv-arrow">→</span>
+          <select class="conv-sel" id="conv-to" onchange="runConv()">
+            <option value="pc">PC</option>
+            <option value="pp">PP</option>
+            <option value="pe">PE</option>
+            <option value="po">PO</option>
+            <option value="pl" selected>PL</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <div style="font-size:11px;color:var(--muted);flex:1;" id="conv-formula">—</div>
+          <div class="conv-result" id="conv-result" style="flex:0 0 auto;min-width:80px;">—</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.7;">
+          <b style="color:var(--sub);">Tabela de referência</b><br>
+          1 PL = 10 PO · 1 PO = 10 PE · 1 PE = 10 PP · 1 PP = 10 PC
+        </div>
+      </div>
+    </div>
+
+    <!-- DADOS -->
+    <div id="tab-dice" class="tab">
+      <div class="roll-area">
+        <div class="d-result" id="d-res">—</div>
+        <div class="d-label" id="d-lbl">Toque em um dado</div>
+        <div class="dice-btns">
+          <span class="dp" onclick="roll(4,'d4')">d4</span>
+          <span class="dp" onclick="roll(6,'d6')">d6</span>
+          <span class="dp" onclick="roll(8,'d8')">d8</span>
+          <span class="dp" onclick="roll(10,'d10')">d10</span>
+          <span class="dp" onclick="roll(12,'d12')">d12</span>
+          <span class="dp" onclick="roll(20,'d20')">d20</span>
+          <span class="dp" onclick="rollM(5,6,'Furtivo 5d6')">Furtivo 5d6</span>
+          <span class="dp" onclick="rollB(20,15,'Iniciativa')">Iniciativa</span>
+          <span class="dp" onclick="rollM(2,8,'Spray Veneno 2d8')">Spray Veneno</span>
+        </div>
+      </div>
+      <div class="sec">Histórico</div>
+      <div id="d-hist" style="font-size:12px;color:var(--muted);"></div>
+    </div>
+
+    <!-- BG -->
+    <div id="tab-bg" class="tab">
+      <div class="bg-b"><div class="bg-t">Aparência</div><div class="bg-c">Olhos: <b>Amarelo</b> · Pele: <b>Moreno c/ escamas roxas</b><br>Cabelo: <b>Dread</b> · Cicatriz: <b>Pescoço</b> · 1,72m · 64kg</div></div>
+      <div class="bg-b"><div class="bg-t">Personalidade</div><div class="bg-c">Astuto e silencioso. Instinto de sobrevivência aguçado. Observação como segunda natureza. Curioso sobre venenos e magia.</div></div>
+      <div class="bg-b"><div class="bg-t">Vínculos</div><div class="bg-c">Mentor ladino — único que ganhou respeito e confiança. Guilda dos Ladrões.</div></div>
+      <div class="bg-b"><div class="bg-t">Falhas</div><div class="bg-c">Desconfiança excessiva. Prefere a solidão. Escravidão deixou cicatrizes profundas.</div></div>
+      <div class="bg-b" style="border-color:rgba(226,75,74,0.25);"><div class="bg-t" style="color:var(--red);">Inimigos</div><div class="bg-c" style="color:#e88;">Alguém que descobriu ter sido roubado em 250 POs.</div></div>
+      <div class="bg-b"><div class="bg-t">Ideais</div><div class="bg-c">Liberdade acima de tudo. Poder como ferramenta. Ascensão pelos rituais Yuan-ti.</div></div>
+      <div class="bg-b" style="border-color:rgba(127,119,221,0.22);"><div class="bg-t">História</div><div class="bg-c">Órfão de guerra, criado como escravo por anões. Aprendiz de ladino especializado em venenos. Herança Yuan-ti manifestada na adolescência. Busca ascender como abominação temível.</div></div>
+    </div>
+
+  </div>
+</div>
+
+<button class="fab" id="fab" onclick="openNew()">+</button>
+
+<!-- MODAL ITEM -->
+<div class="overlay" id="modal-item" onclick="clOut(event,'modal-item')">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mi-title">Item</div>
+    <input type="hidden" id="mi-id">
+    <div class="fg"><div class="fl">Nome</div><input class="fi" type="text" id="mi-name" placeholder="Nome do item"></div>
+    <div class="fg"><div class="fl">Tipo</div>
+      <select class="fsel" id="mi-type">
+        <option value="Weapon">⚔️ Weapon</option><option value="Armour">🛡️ Armour</option>
+        <option value="Potions/poisons">🧪 Potions/Poisons</option><option value="Alquimia">⚗️ Alquimia</option>
+        <option value="Tool">🔧 Tool</option><option value="Trading/Currency">💎 Trading/Currency</option>
+        <option value="Food/Water">🍖 Food/Water</option><option value="Clothing">👗 Clothing</option>
+      </select>
+    </div>
+    <div class="fg"><div class="fl">Status</div>
+      <select class="fsel" id="mi-status">
+        <option value="Backpack">🎒 Backpack</option><option value="Mansão">🏛️ Mansão</option><option value="Descartado">🗑️ Descartado</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="fg"><div class="fl">Qtd.</div><input class="fi" type="text" id="mi-qty" placeholder="1"></div>
+      <div class="fg"><div class="fl">Bônus/Dano</div><input class="fi" type="text" id="mi-bonus" placeholder="+1, 1d8..."></div>
+    </div>
+    <div class="fg" onclick="togMag()"><div class="tog-row"><span class="tog-lbl">✦ Item Mágico</span><div class="tog" id="mi-mag-tog"></div></div></div>
+    <div class="fg"><div class="fl">Descrição</div><textarea class="fta" id="mi-desc" placeholder="Efeito, história, uso..."></textarea></div>
+    <div class="mbtns">
+      <button class="mb-cancel" onclick="cl('modal-item')">Cancelar</button>
+      <button class="mb-del" id="mi-del" onclick="delItem()" style="display:none;">Excluir</button>
+      <button class="mb-save" onclick="saveItem()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL STAT -->
+<div class="overlay" id="modal-stat" onclick="clOut(event,'modal-stat')">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="ms-title">Editar</div>
+    <div id="ms-body"></div>
+    <div class="mbtns">
+      <button class="mb-cancel" onclick="cl('modal-stat')">Cancelar</button>
+      <button class="mb-save" onclick="saveSE()">Aplicar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+const KEY='ashassul_v3';
+function ld(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r);}catch(e){}return null;}
+function sv(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const ITEMS=[
+  {id:'1',name:'Arco Longo',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'2',name:'Rapieira',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'3',name:'Mosquete',type:'Weapon',status:'Backpack',qty:'1',bonus:'2d8',magic:false,desc:''},
+  {id:'4',name:'Espada Longa',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'5',name:'Adaga',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'6',name:'Lança',type:'Weapon',status:'Backpack',qty:'2',bonus:'',magic:false,desc:''},
+  {id:'7',name:'Glaive',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'8',name:'Alabarda',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'9',name:'Varinha da Paralisia',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'10',name:'Varinha Mágica',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'11',name:'Flecha Inquebrável',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'12',name:'Flecha de Assassinato',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'13',name:'Armadura Média',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'14',name:'Armadura de Couro Batido',type:'Armour',status:'Backpack',qty:'2',bonus:'',magic:false,desc:''},
+  {id:'15',name:'Armadura Full Plate',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'16',name:'Armadura da Invulnerabilidade',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'17',name:'Escudo',type:'Armour',status:'Backpack',qty:'2',bonus:'',magic:false,desc:''},
+  {id:'18',name:'Anel da Dríade',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'19',name:'Tiara do Rei Igris',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'20',name:'Anel de Calor',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'21',name:'Anel do Escudo Mental',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'22',name:'Botas Élficas',type:'Clothing',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'23',name:'Óculos Anti-Basílisco',type:'Tool',status:'Backpack',qty:'3',bonus:'',magic:false,desc:''},
+  {id:'24',name:'Bag of Holding',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'25',name:'Kit de Veneno',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'26',name:'Kit de Disfarce',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'27',name:'Kit de 1º Socorros',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'28',name:'Par de Dados Cravejados',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'29',name:'Corda',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'30',name:'Pack de Viagem',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'31',name:'Gema da Luminosidade',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'32',name:'Amuleto Detectar Localização',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'33',name:'Poção de Cura',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'2d4+2',magic:true,desc:''},
+  {id:'34',name:'Poção de Cura Maior',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'4d4+4',magic:true,desc:''},
+  {id:'35',name:'Poção Restauração Menor',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'36',name:'Poção do Sopro de Fogo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'37',name:'Poção da Forma Gasosa',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'38',name:"Poção de Respirar n'Água",type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'39',name:'Poção de Resistência ao Fogo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'40',name:'Poção de Ler Mentes',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'41',name:'Poção da Amizade Animal',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'42',name:'Poção do Heroísmo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'43',name:'Poção do Gigante de Fogo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'44',name:'Poção da Clarividência',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'45',name:'Poção da Invulnerabilidade',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'46',name:'Veneno Simples',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'47',name:'Pó do Desaparecimento',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'48',name:'Bolsa de Fogo ½ Dragão',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'49',name:'Bolsa de Veneno ½ Dragão',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'50',name:'Ácido',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'51',name:'Mercúrio',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'52',name:'Ovo de Slime de Fogo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'53',name:'Gordura de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'54',name:'Sangue de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'55',name:'Dentes de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'56',name:'Olhos de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'57',name:'Unha de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'58',name:'Olhos de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'59',name:'Garra de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'60',name:'Óleo de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'61',name:'Tentáculo de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'62',name:'Caninos de Ywern das Sombras',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'63',name:'Olhos de Meio Dragão',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'64',name:'Pele de Blink Dog Trançada',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'65',name:'Pergaminho Animar Objetos',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'66',name:'Pergaminho Antagonizar',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'67',name:'Pergaminho Demi Plano',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'68',name:'Pergaminho Comando',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'69',name:'Pergaminho Detectar Magia',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'70',name:'Pergaminho Curar Ferimentos',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'71',name:'Pergaminho Distorcer Valor',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'72',name:'Pergaminho Passo sem Rastro',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'73',name:'Diamantes',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'74',name:'Jade',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'75',name:'Pedra Coral',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'76',name:'Olho de Tigre',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'77',name:'Turmalina',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'78',name:'Âmbar',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'79',name:'Citrina',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'80',name:'Zircônio',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'81',name:'Jasper',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'82',name:'Pedra da Lua',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'83',name:'Moeda do General Thoraff',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
+  {id:'84',name:'Fragmento Núcleo de Constructo',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'85',name:'Escultura de Animais Turquesa',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'86',name:'Vinho',type:'Food/Water',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+];
+const DEF={hpMax:53,hpDmg:8,hpTemp:7,coins:{pc:0,pp:0,pe:0,po:0,pl:0},attrs:{str:10,dex:20,con:10,int:15,wis:13,cha:12},ca:{base:12,bonus:0},initBonus:5,counters:{trans:{used:0,max:3},spray:{used:0,max:3},sug:{used:0,max:3}},items:ITEMS};
+let S=ld()||JSON.parse(JSON.stringify(DEF));
+if(!S.counters)S.counters=JSON.parse(JSON.stringify(DEF.counters));
+if(!S.items||!S.items.length)S.items=JSON.parse(JSON.stringify(ITEMS));
+if(!S.ca)S.ca={base:12,bonus:0};
+if(!S.coins)S.coins={pc:0,pp:0,pe:0,po:0,pl:0};
+if(!S.qv)S.qv={open:false,charges:4,usedCharges:0,dmgType:"perf",magicActive:false};
+if(S.initBonus===undefined)S.initBonus=5;
+function md(s){return Math.floor((s-10)/2);}
+function fm(m){return(m>=0?'+':'')+m;}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+function sw(name,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tab-'+name).classList.add('on');
+  btn.classList.add('on');
+  document.getElementById('fab').style.display=name==='inv'?'flex':'none';
+  if(name==='inv')renderInv();
+  if(name==='coins')initCoins();
+}
+function goStats(){sw('stats',document.querySelector('.nb'));setTimeout(()=>document.getElementById('hpc').scrollIntoView({behavior:'smooth'}),100);}
+// HP
+function calcHP(){
+  const mx=parseInt(document.getElementById('in-hpmax').value)||S.hpMax;
+  const dmg=parseInt(document.getElementById('in-dmg').value)||0;
+  const temp=parseInt(document.getElementById('in-temp').value)||0;
+  const cur=Math.max(0,mx-dmg);
+  const pct=Math.round(cur/mx*100);
+  const bar=document.getElementById('hpbar');
+  bar.style.width=pct+'%';
+  bar.style.background=pct>50?'linear-gradient(90deg,#1d9e75,#5dcaa5)':pct>25?'linear-gradient(90deg,#8a6000,var(--gold))':'linear-gradient(90deg,#8a1010,var(--red))';
+  document.getElementById('hp-display').textContent=cur+(temp>0?' (+'+temp+')':'');
+  document.getElementById('hp-display').style.color=pct>50?'#5dcaa5':pct>25?'var(--gold)':'var(--red)';
+  document.getElementById('hp-max-d').textContent=mx;
+  document.getElementById('hp-temp-d').textContent=temp;
+  const hv=document.getElementById('hdr-hp');
+  const hf=document.getElementById('hdr-fill');
+  hv.textContent=cur+(temp>0?'+'+temp:'');
+  hv.className='h-hp-val '+(pct>50?'ok':pct>25?'low':'crit');
+  hf.style.width=pct+'%';
+  hf.style.background=pct>50?'#5dcaa5':pct>25?'var(--gold)':'var(--red)';
+}
+function saveHP(){
+  S.hpMax=parseInt(document.getElementById('in-hpmax').value)||S.hpMax;
+  S.hpDmg=parseInt(document.getElementById('in-dmg').value)||0;
+  S.hpTemp=parseInt(document.getElementById('in-temp').value)||0;
+  sv();toast('HP salvo ✓');
+}
+function qDH(sign){
+  const v=parseInt(document.getElementById('quick-val').value)||0;
+  if(v<=0)return;
+  if(sign<0){S.hpDmg=Math.min(S.hpMax,S.hpDmg+v);}
+  else{S.hpDmg=Math.max(0,S.hpDmg-v);}
+  document.getElementById('in-dmg').value=S.hpDmg;
+  calcHP();sv();toast(sign<0?'-'+v+' HP':'+'+v+' HP');
+  document.getElementById('quick-val').value='';
+}
+// ATTRS
+const AL={str:'FORÇA',dex:'DESTREZA',con:'CONSTITUIÇÃO',int:'INTELIGÊNCIA',wis:'SABEDORIA',cha:'CARISMA'};
+function renderStats(){
+  const g=document.getElementById('stat-grid');
+  g.innerHTML=['str','dex','con','int','wis','cha'].map(k=>{
+    const sc=S.attrs[k],m=md(sc);
+    return`<div class="stat${k==='dex'?' hi':''}" onclick="openSE('attr_${k}')">
+      <div class="stat-name">${AL[k]}</div>
+      <div class="stat-score">${sc}</div>
+      <div class="stat-mod">${fm(m)}</div>
+    </div>`;
+  }).join('');
+  const dex=md(S.attrs.dex),ca=S.ca.base+(S.ca.bonus||0)+dex;
+  document.getElementById('d-ca').textContent=ca;
+  document.getElementById('d-ca-s').textContent=S.ca.base+'+'+(S.ca.bonus||0)+' base+DEX('+fm(dex)+')';
+  const it=md(S.attrs.dex)+(S.initBonus||0);
+  document.getElementById('d-init').textContent=fm(it);
+  const sa=md(S.attrs.cha)+4,sd=8+md(S.attrs.cha)+4;
+  document.getElementById('d-spatk').textContent=fm(sa);
+  document.getElementById('d-spdc').textContent=sd;
+  document.getElementById('s-pp').textContent=10+md(S.attrs.wis)+4;
+}
+let curSEK='';
+function openSE(key){
+  curSEK=key;
+  const body=document.getElementById('ms-body');
+  if(key.startsWith('attr_')){
+    const a=key.replace('attr_','');
+    document.getElementById('ms-title').textContent=AL[a];
+    body.innerHTML=`<div class="fg"><div class="fl">Valor</div><input class="fi" type="number" id="se-v" value="${S.attrs[a]}" min="1" max="30" style="text-align:center;font-size:24px;font-weight:700;" oninput="prvMod()"></div><div class="calc-prev" id="se-pr">Modificador: <b>${fm(md(S.attrs[a]))}</b></div>`;
+  }else if(key==='ca'){
+    document.getElementById('ms-title').textContent='Classe de Armadura';
+    const dex=md(S.attrs.dex);
+    body.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="fg"><div class="fl">CA Base</div><input class="fi" type="number" id="se-cab" value="${S.ca.base}" min="0" max="30" style="text-align:center;font-size:20px;" oninput="prvCA()"></div>
+      <div class="fg"><div class="fl">Bônus Extra</div><input class="fi" type="number" id="se-cax" value="${S.ca.bonus||0}" min="0" max="20" style="text-align:center;font-size:20px;" oninput="prvCA()"></div>
+    </div><div class="calc-prev" id="se-pr">CA = base + bônus + DEX(${fm(dex)}) = <b>${S.ca.base+(S.ca.bonus||0)+dex}</b></div>`;
+  }else if(key==='init'){
+    document.getElementById('ms-title').textContent='Iniciativa';
+    body.innerHTML=`<div class="fg"><div class="fl">Bônus Adicional (Alerta: +5)</div><input class="fi" type="number" id="se-ib" value="${S.initBonus||0}" min="0" max="20" style="text-align:center;font-size:20px;" oninput="prvInit()"></div><div class="calc-prev" id="se-pr">Iniciativa = DEX(${fm(md(S.attrs.dex))}) + ${S.initBonus||0} = <b>${fm(md(S.attrs.dex)+(S.initBonus||0))}</b></div>`;
+  }
+  document.getElementById('modal-stat').classList.add('open');
+}
+function prvMod(){const v=parseInt(document.getElementById('se-v').value)||10;document.getElementById('se-pr').innerHTML='Modificador: <b>'+fm(md(v))+'</b>';}
+function prvCA(){const b=parseInt(document.getElementById('se-cab').value)||0,x=parseInt(document.getElementById('se-cax').value)||0,dex=md(S.attrs.dex);document.getElementById('se-pr').innerHTML='CA = '+b+' + '+x+' + DEX('+fm(dex)+') = <b>'+(b+x+dex)+'</b>';}
+function prvInit(){const b=parseInt(document.getElementById('se-ib').value)||0;document.getElementById('se-pr').innerHTML='Iniciativa = DEX('+fm(md(S.attrs.dex))+') + '+b+' = <b>'+fm(md(S.attrs.dex)+b)+'</b>';}
+function saveSE(){
+  if(curSEK.startsWith('attr_')){S.attrs[curSEK.replace('attr_','')]=parseInt(document.getElementById('se-v').value)||10;}
+  else if(curSEK==='ca'){S.ca.base=parseInt(document.getElementById('se-cab').value)||0;S.ca.bonus=parseInt(document.getElementById('se-cax').value)||0;}
+  else if(curSEK==='init'){S.initBonus=parseInt(document.getElementById('se-ib').value)||0;}
+  sv();renderStats();cl('modal-stat');toast('Salvo ✓');
+}
+// COUNTERS
+function renderPips(elId,key,max,cls){
+  const el=document.getElementById(elId);if(!el)return;
+  const used=S.counters[key].used;
+  el.innerHTML=Array.from({length:max},(_,i)=>`<div class="pip${i<used?' '+cls:''}" onclick="togPip('${key}',${i},${max},'${cls}')">${i+1}</div>`).join('');
+}
+function togPip(key,idx,max,cls){
+  S.counters[key].used=idx<S.counters[key].used?idx:Math.min(idx+1,max);
+  sv();renderPips('pips-'+key,key,max,cls);
+  toast({trans:'Forma',spray:'Spray de Veneno',sug:'Sugestão'}[key]+': '+S.counters[key].used+'/'+max);
+}
+function resetTrans(){S.counters.trans.used=0;sv();renderPips('pips-trans','trans',3,'used');toast('Formas resetadas ✓');}
+function resetConj(){S.counters.spray.used=0;S.counters.sug.used=0;sv();renderPips('pips-spray','spray',3,'snake-used');renderPips('pips-sug','sug',3,'snake-used');toast('Conjuração resetada ✓');}
+// INVENTORY
+let invF='all';
+const TM={Weapon:'weapon',Armour:'armour','Potions/poisons':'potion',Alquimia:'alq',Tool:'tool','Trading/Currency':'currency','Food/Water':'food',Clothing:'clothing'};
+const TL={Weapon:'Weapon',Armour:'Armour','Potions/poisons':'Poção',Alquimia:'Alquimia',Tool:'Ferramenta','Trading/Currency':'Moeda','Food/Water':'Comida',Clothing:'Roupa'};
+function setFilt(f,btn){invF=f;document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderInv();}
+function renderInv(){
+  const q=(document.getElementById('inv-search').value||'').toLowerCase();
+  const items=S.items.filter(i=>{
+    if(q&&!i.name.toLowerCase().includes(q))return false;
+    if(invF==='all')return true;
+    if(invF==='magic')return i.magic;
+    return i.type===invF;
+  });
+  const el=document.getElementById('inv-list');
+  if(!items.length){el.innerHTML='<div class="empty-state">Nenhum item encontrado</div>';return;}
+  el.innerHTML=items.map(i=>`
+    <div class="ii${i.magic?' magic':''}" onclick="openEdit('${i.id}')">
+      <div class="ii-top">${i.magic?'<div class="mdot"></div>':''}<div class="ii-name">${i.name}</div><div class="ii-qty">${i.qty||'1'}</div></div>
+      <div class="ii-tags">
+        <span class="it ${TM[i.type]||'tool'}">${TL[i.type]||i.type}</span>
+        <span class="${i.status==='Backpack'?'sp-bp':i.status==='Mansão'?'sp-mn':'sp-dr'}">${i.status}</span>
+        ${i.bonus?`<span class="it tool">${i.bonus}</span>`:''}
+      </div>
+      ${i.desc?`<div class="ii-note">${i.desc.substring(0,70)}${i.desc.length>70?'…':''}</div>`:''}
+    </div>`).join('');
+}
+let eMag=false;
+function openNew(){eMag=false;['mi-id','mi-name','mi-bonus','mi-desc'].forEach(id=>document.getElementById(id).value='');document.getElementById('mi-type').value='Weapon';document.getElementById('mi-status').value='Backpack';document.getElementById('mi-qty').value='1';document.getElementById('mi-mag-tog').className='tog';document.getElementById('mi-title').textContent='Novo Item';document.getElementById('mi-del').style.display='none';document.getElementById('modal-item').classList.add('open');}
+function openEdit(id){
+  const item=S.items.find(i=>i.id===id);if(!item)return;
+  eMag=item.magic;
+  document.getElementById('mi-id').value=id;document.getElementById('mi-name').value=item.name;document.getElementById('mi-type').value=item.type;document.getElementById('mi-status').value=item.status;document.getElementById('mi-qty').value=item.qty||'1';document.getElementById('mi-bonus').value=item.bonus||'';document.getElementById('mi-desc').value=item.desc||'';document.getElementById('mi-mag-tog').className='tog'+(item.magic?' on':'');document.getElementById('mi-title').textContent=item.name;document.getElementById('mi-del').style.display='block';document.getElementById('modal-item').classList.add('open');
+}
+function togMag(){eMag=!eMag;document.getElementById('mi-mag-tog').className='tog'+(eMag?' on':'');}
+function saveItem(){
+  const id=document.getElementById('mi-id').value;
+  const item={id:id||Date.now().toString(),name:document.getElementById('mi-name').value||'Item',type:document.getElementById('mi-type').value,status:document.getElementById('mi-status').value,qty:document.getElementById('mi-qty').value||'1',bonus:document.getElementById('mi-bonus').value,magic:eMag,desc:document.getElementById('mi-desc').value};
+  if(id){const i=S.items.findIndex(x=>x.id===id);if(i>=0)S.items[i]=item;}else S.items.push(item);
+  sv();cl('modal-item');renderInv();toast('Item salvo ✓');
+}
+function delItem(){const id=document.getElementById('mi-id').value;if(!id||!confirm('Excluir?'))return;S.items=S.items.filter(i=>i.id!==id);sv();cl('modal-item');renderInv();toast('Excluído');}
+function cl(id){document.getElementById(id).classList.remove('open');}
+function clOut(e,id){if(e.target===document.getElementById(id))cl(id);}
+// DICE
+const dh=[];
+function roll(s,l){const r=Math.floor(Math.random()*s)+1;show(l,r);}
+function rollM(c,s,l){const rs=Array.from({length:c},()=>Math.floor(Math.random()*s)+1);const t=rs.reduce((a,b)=>a+b,0);show(l+'['+rs.join('+')+']',t);}
+function rollB(s,b,l){const r=Math.floor(Math.random()*s)+1;const t=r+b;show(l+' d20('+r+')+'+b,t);}
+function show(label,val){
+  document.getElementById('d-res').textContent=val;document.getElementById('d-lbl').textContent=label+' = '+val;
+  dh.unshift({label,val,t:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})});
+  if(dh.length>10)dh.pop();
+  document.getElementById('d-hist').innerHTML=dh.map(h=>`<div class="dh-row"><span>${h.label}</span><span style="color:var(--gold);font-weight:600;">${h.val} <span style="color:var(--muted);font-size:10px;">${h.t}</span></span></div>`).join('');
+}
+// INIT
+
+
+// QUIMERA VENENOSA
+const QV_TYPES = {
+  perf:    {label:'⚔️ Perfurante',   bg:'rgba(180,100,100,0.2)', border:'rgba(180,100,100,0.5)', color:'#e0a0a0', magic:false},
+  magico:  {label:'✦ Mágico Perf.',  bg:'rgba(127,119,221,0.2)', border:'rgba(127,119,221,0.5)', color:'#c4c0f0', magic:true},
+  veneno:  {label:'☠️ Veneno',        bg:'rgba(100,180,80,0.2)',  border:'rgba(100,180,80,0.5)',  color:'#90d070', magic:false},
+  fogo:    {label:'🔥 Fogo',          bg:'rgba(220,120,40,0.2)',  border:'rgba(220,120,40,0.5)',  color:'#f09050', magic:false},
+  gelo:    {label:'❄️ Gelo',          bg:'rgba(100,180,220,0.2)', border:'rgba(100,180,220,0.5)', color:'#80c8e8', magic:false},
+  radiante:{label:'☀️ Radiante',      bg:'rgba(240,220,80,0.2)',  border:'rgba(240,220,80,0.5)',  color:'#e8d060', magic:false},
+  eletrico:{label:'⚡ Elétrico',       bg:'rgba(180,140,240,0.2)', border:'rgba(180,140,240,0.5)', color:'#c8a8f0', magic:false},
+  acido:   {label:'🧪 Ácido',         bg:'rgba(140,200,60,0.2)',  border:'rgba(140,200,60,0.5)',  color:'#a0d840', magic:false},
+};
+const QV_MAX = 4; // proficiency bonus
+
+function initQV(){
+  if(!S.qv) S.qv = {open:false, charges:QV_MAX, usedCharges:0, dmgType:'perf', magicActive:false};
+  renderQVPips();
+  updateQVDisplay();
+  if(S.qv.open){ document.getElementById('qv-body').classList.add('open'); document.getElementById('qv-chevron').classList.add('open'); }
+}
+
+function toggleQV(){
+  S.qv.open = !S.qv.open;
+  document.getElementById('qv-body').classList.toggle('open', S.qv.open);
+  document.getElementById('qv-chevron').classList.toggle('open', S.qv.open);
+  sv();
+}
+
+function renderQVPips(){
+  const max = QV_MAX;
+  const used = S.qv.usedCharges||0;
+  document.getElementById('qv-pips').innerHTML = Array.from({length:max},(_,i)=>{
+    const isUsed = i < used;
+    const cls = isUsed ? 'used' : '';
+    return `<div class="qv-pip ${cls}" onclick="toggleQVPip(${i})">${i+1}</div>`;
+  }).join('');
+  document.getElementById('qv-charges-left').textContent = max - used;
+  document.getElementById('qv-charges-max').textContent = max;
+  document.getElementById('qv-charge-stat').textContent = (max-used)+'/'+max;
+}
+
+function toggleQVPip(idx){
+  const used = S.qv.usedCharges||0;
+  S.qv.usedCharges = idx < used ? idx : Math.min(idx+1, QV_MAX);
+  // if all charges consumed, deactivate magic mode
+  if(S.qv.usedCharges >= QV_MAX) S.qv.magicActive = false;
+  sv(); renderQVPips(); updateQVDisplay();
+  toast('Cargas Quimera: '+(QV_MAX-S.qv.usedCharges)+'/'+QV_MAX);
+}
+
+function resetQVCharges(){
+  S.qv.usedCharges = 0; S.qv.magicActive = false;
+  sv(); renderQVPips(); updateQVDisplay(); toast('Quimera: cargas restauradas ao amanhecer ✓');
+}
+
+function selDmg(el, type, label){
+  // only allow non-base types if magic mode active or if selecting base perfurante
+  if(type !== 'perf' && !S.qv.magicActive){
+    // activate magic mode using a charge
+    if(S.qv.usedCharges >= QV_MAX){ toast('Sem cargas disponíveis!'); return; }
+    S.qv.usedCharges++;
+    S.qv.magicActive = true;
+  }
+  if(type === 'perf' && S.qv.magicActive){
+    S.qv.magicActive = false;
+  }
+  S.qv.dmgType = type;
+  sv(); renderQVPips(); updateQVDisplay();
+  // update visual selection
+  document.querySelectorAll('#qv-dmg-types .dt').forEach(d=>d.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function updateQVDisplay(){
+  const t = QV_TYPES[S.qv.dmgType||'perf'];
+  const isMagic = S.qv.magicActive;
+  // header badge
+  document.getElementById('qv-type-badge').textContent = t.label;
+  const magicBadge = document.getElementById('qv-magic-badge');
+  magicBadge.style.display = isMagic ? 'inline-flex' : 'none';
+  // card border color
+  const card = document.getElementById('qv-card');
+  card.style.borderColor = isMagic ? 'rgba(127,119,221,0.5)' : 'rgba(226,75,74,0.35)';
+  card.style.background = isMagic ? 'rgba(127,119,221,0.04)' : 'rgba(226,75,74,0.06)';
+  // active banner
+  const banner = document.getElementById('qv-active-banner');
+  banner.style.display = isMagic ? 'block' : 'none';
+  document.getElementById('qv-active-type').textContent = t.label;
+  // damage display
+  const dmgLabel = isMagic ? '1d10+1 Mágico' : '1d10+1';
+  document.getElementById('qv-dmg-stat').textContent = dmgLabel;
+  document.getElementById('qv-dmg-full').textContent = dmgLabel;
+  const pill = document.getElementById('qv-dmg-pill');
+  pill.textContent = t.label;
+  pill.style.background = t.bg;
+  pill.style.borderColor = t.border;
+  pill.style.color = t.color;
+  pill.style.border = '.5px solid '+t.border;
+  // sync selected pill in dmg-types
+  document.querySelectorAll('#qv-dmg-types .dt').forEach(d=>{
+    const dtype = d.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    d.classList.toggle('sel', dtype === S.qv.dmgType);
+  });
+}
+
+// COINS
+const COIN_PO={pc:0.001,pp:0.01,pe:0.1,po:1,pl:10};
+const COIN_LABEL={pc:'PC',pp:'PP',pe:'PE',po:'PO',pl:'PL'};
+function saveCoin(type,val){S.coins[type]=parseInt(val)||0;sv();}
+function calcTotal(){
+  const c=S.coins;
+  const total=c.pl*10+c.po+c.pe*0.1+c.pp*0.01+c.pc*0.001;
+  const display=total>=1?total.toFixed(2)+' PO':((total*1000).toFixed(0))+' PC';
+  document.getElementById('total-po').textContent=total>=1?(Math.round(total*100)/100)+' PO':(Math.round(total*10000)/10)+' PP';
+}
+function runConv(){
+  const amt=parseFloat(document.getElementById('conv-amt').value)||0;
+  const from=document.getElementById('conv-from').value;
+  const to=document.getElementById('conv-to').value;
+  const rFrom=COIN_PO[from],rTo=COIN_PO[to];
+  const result=amt*rFrom/rTo;
+  const nice=result===Math.floor(result)?result.toString():result.toFixed(4).replace(/\.?0+$/,'');
+  document.getElementById('conv-result').textContent=nice+' '+COIN_LABEL[to];
+  document.getElementById('conv-formula').textContent=amt+' '+COIN_LABEL[from]+' × ('+rFrom+'/'+rTo+')';
+}
+function initCoins(){
+  if(!S.coins)S.coins={pc:0,pp:0,pe:0,po:0,pl:0};
+if(!S.qv)S.qv={open:false,charges:4,usedCharges:0,dmgType:"perf",magicActive:false};
+  ['pc','pp','pe','po','pl'].forEach(k=>{
+    const el=document.getElementById('c-'+k);
+    if(el)el.value=S.coins[k]||0;
+  });
+  calcTotal();
+}
+
+function init(){
+  document.getElementById('in-hpmax').value=S.hpMax;
+  document.getElementById('in-dmg').value=S.hpDmg;
+  document.getElementById('in-temp').value=S.hpTemp;
+  calcHP();renderStats();
+  renderPips('pips-trans','trans',3,'used');
+  renderPips('pips-spray','spray',3,'snake-used');
+  renderPips('pips-sug','sug',3,'snake-used');
+  renderInv();
+  initCoins();
+  initQV();
+}
+init();
+</script>
+</body>
+</html>
