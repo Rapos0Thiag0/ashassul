@@ -341,6 +341,38 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
 .nmt:not(.sel){opacity:.45;}
 .nmt.sel{opacity:1;}
 
+
+/* JSON PARSER AREA */
+.json-toggle{width:100%;background:rgba(239,159,39,0.08);border:.5px dashed rgba(239,159,39,0.35);color:#fac775;font-size:11px;padding:8px 12px;border-radius:var(--r2);cursor:pointer;text-align:left;margin-bottom:8px;transition:background .15s;}
+.json-toggle:active{background:rgba(239,159,39,0.15);}
+.json-panel{display:none;margin-bottom:10px;}
+.json-panel.open{display:block;}
+.json-input{width:100%;background:rgba(255,255,255,0.04);border:.5px solid rgba(239,159,39,0.3);border-radius:var(--r2);color:#e8c870;font-size:11px;font-family:monospace;padding:9px 11px;outline:none;resize:none;min-height:90px;}
+.json-input:focus{border-color:var(--gold);}
+.json-parse-btn{width:100%;background:rgba(239,159,39,0.15);border:.5px solid rgba(239,159,39,0.4);color:#fac775;font-size:12px;padding:9px;border-radius:var(--r2);cursor:pointer;margin-top:6px;transition:background .15s;}
+.json-parse-btn:active{background:rgba(239,159,39,0.28);}
+.json-err{font-size:11px;color:var(--red);margin-top:5px;display:none;}
+.json-ok{font-size:11px;color:#5dcaa5;margin-top:5px;display:none;}
+
+/* LINKS between notes */
+.link-section{margin-top:8px;}
+.link-section .fl{margin-bottom:6px;}
+.link-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px;}
+.link-chip{font-size:10px;padding:3px 10px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:4px;border:.5px solid;transition:opacity .15s;}
+.link-chip.linked{background:rgba(127,119,221,0.15);border-color:var(--border2);color:#c4c0f0;}
+.link-chip.linked .lx{color:var(--red);font-size:12px;margin-left:2px;}
+.link-chip-add{font-size:10px;padding:3px 10px;border-radius:20px;cursor:pointer;background:rgba(255,255,255,0.04);border:.5px dashed rgba(255,255,255,0.15);color:var(--muted);}
+.link-picker{background:#171726;border:.5px solid var(--border2);border-radius:var(--r);max-height:160px;overflow-y:auto;display:none;margin-bottom:6px;}
+.link-picker.open{display:block;}
+.lp-item{padding:8px 12px;font-size:12px;color:var(--sub);cursor:pointer;border-bottom:.5px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:8px;}
+.lp-item:last-child{border:none;}
+.lp-item:active{background:rgba(127,119,221,0.1);}
+.lp-search{width:100%;background:rgba(255,255,255,0.04);border:none;border-bottom:.5px solid var(--border);color:var(--text);font-size:12px;padding:8px 12px;outline:none;}
+
+/* Note card linked badges */
+.note-links-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+.nl-chip{font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(127,119,221,0.1);border:.5px solid var(--border);color:#afa9ec;}
+
 </style>
 </head>
 <body>
@@ -742,6 +774,13 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
     <div class="fg"><div class="fl">Perícias & Sentidos</div><input class="fi" type="text" id="mu-skills" placeholder="Furtividade +7, Visão escura 18m..."></div>
     <div class="fg"><div class="fl">Habilidades Especiais</div><textarea class="fta" id="mu-traits" placeholder="Spider Climb. A aranha pode escalar superfícies difíceis..." style="min-height:60px;"></textarea></div>
     <div class="fg"><div class="fl">Ataques & Ações</div><textarea class="fta" id="mu-actions" placeholder="Mordida. +5 para acertar, 1,5m — 1d8+3 perfurante..." style="min-height:70px;"></textarea></div>
+    <button class="json-toggle" onclick="toggleJsonPanel('mu-json-panel',this)">📋 Colar JSON 5etools para preencher automaticamente ▾</button>
+    <div class="json-panel" id="mu-json-panel">
+      <textarea class="json-input" id="mu-json" placeholder='Cole aqui o JSON do 5etools...' rows="5"></textarea>
+      <button class="json-parse-btn" onclick="parseUndeadJSON()">⚡ Preencher campos automaticamente</button>
+      <div class="json-err" id="mu-json-err">JSON inválido — verifique o formato.</div>
+      <div class="json-ok" id="mu-json-ok">✓ Campos preenchidos com sucesso!</div>
+    </div>
     <div class="mbtns">
       <button class="mb-cancel" onclick="cl('modal-undead')">Cancelar</button>
       <button class="mb-del" id="mu-del" onclick="delUndead()" style="display:none;">Excluir</button>
@@ -770,6 +809,24 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
       </div>
     </div>
     <div class="fg"><div class="fl">Descrição</div><textarea class="fta" id="mn-body" placeholder="Detalhes, relações, localização, importância..." style="min-height:100px;"></textarea></div>
+    <div id="mn-json-wrapper">
+      <button class="json-toggle" onclick="toggleJsonPanel('mn-json-panel',this)">📋 Colar JSON 5etools (NPC) ▾</button>
+      <div class="json-panel" id="mn-json-panel">
+        <textarea class="json-input" id="mn-json" placeholder='Cole aqui o JSON do 5etools...' rows="4"></textarea>
+        <button class="json-parse-btn" onclick="parseNoteJSON()">⚡ Preencher nome e descrição</button>
+        <div class="json-err" id="mn-json-err">JSON inválido.</div>
+        <div class="json-ok" id="mn-json-ok">✓ Preenchido!</div>
+      </div>
+    </div>
+    <div class="link-section">
+      <div class="fl">Vínculos</div>
+      <div class="link-chips" id="mn-link-chips"></div>
+      <button class="link-chip-add" onclick="toggleLinkPicker()">+ Adicionar vínculo</button>
+      <div class="link-picker" id="mn-link-picker">
+        <input class="lp-search" type="text" placeholder="Buscar anotação..." id="lp-search" oninput="renderLinkPicker()">
+        <div id="lp-items"></div>
+      </div>
+    </div>
     <div class="mbtns">
       <button class="mb-cancel" onclick="cl('modal-note')">Cancelar</button>
       <button class="mb-del" id="mn-del" onclick="delNote()" style="display:none;">Excluir</button>
@@ -1188,6 +1245,9 @@ function openNewUndead(){
   ['mu-name','mu-type','mu-skills','mu-traits','mu-actions'].forEach(id=>document.getElementById(id).value='');
   ['mu-ca','mu-hp','mu-hpcur','mu-str','mu-dex','mu-con','mu-int','mu-wis','mu-cha'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('mu-del').style.display='none';
+  document.getElementById('mu-json').value='';
+  document.getElementById('mu-json-err').style.display='none';
+  document.getElementById('mu-json-ok').style.display='none';
   document.getElementById('modal-undead').classList.add('open');
 }
 
@@ -1280,12 +1340,18 @@ function renderNotes(){
       <div class="session-date">${formatDate(date)}</div>
       ${items.map(n=>{
         const t=NOTE_TYPES[n.type]||NOTE_TYPES.outros;
+        const linkedNames=(n.links||[]).map(lid=>{
+          const ln=S.notes.find(x=>x.id===lid); if(!ln)return'';
+          const lt=NOTE_TYPES[ln.type]||NOTE_TYPES.outros;
+          return `<span class="nl-chip">${lt.label.split(' ')[0]} ${ln.name}</span>`;
+        }).filter(Boolean).join('');
         return `<div class="note-card" onclick="openEditNote('${n.id}')">
           <div class="note-top">
             <div class="note-title">${n.name||'Sem título'}</div>
             <span class="note-type-pill ${t.cls}">${t.label}</span>
           </div>
           ${n.body?`<div class="note-body">${n.body.substring(0,120)}${n.body.length>120?'…':''}</div>`:''}
+          ${linkedNames?`<div class="note-links-row">${linkedNames}</div>`:''}
         </div>`;
       }).join('')}
     </div>`).join('');
@@ -1312,6 +1378,10 @@ function openNewNote(){
   document.querySelectorAll('#mn-types .nmt').forEach(b=>b.classList.remove('sel'));
   document.querySelector('#mn-types .nmt').classList.add('sel');
   document.getElementById('mn-del').style.display='none';
+  document.getElementById('mn-json').value='';
+  document.getElementById('mn-json-err').style.display='none';
+  document.getElementById('mn-json-ok').style.display='none';
+  initNoteLinks([]);
   document.getElementById('modal-note').classList.add('open');
 }
 
@@ -1328,14 +1398,28 @@ function openEditNote(id){
     b.classList.toggle('sel',t===curNoteType);
   });
   document.getElementById('mn-del').style.display='block';
+  document.getElementById('mn-json').value='';
+  document.getElementById('mn-json-err').style.display='none';
+  document.getElementById('mn-json-ok').style.display='none';
+  initNoteLinks(n.links||[]);
   document.getElementById('modal-note').classList.add('open');
 }
 
 function saveNote(){
   const id=document.getElementById('mn-id').value;
-  const n={id:id||Date.now().toString(),name:document.getElementById('mn-name').value||'Sem título',type:curNoteType,date:document.getElementById('mn-date').value||new Date().toISOString().split('T')[0],body:document.getElementById('mn-body').value||''};
+  const existing=id?S.notes.find(x=>x.id===id):null;
+  const oldLinks=existing?existing.links||[]:[];
+  const n={
+    id:id||Date.now().toString(),
+    name:document.getElementById('mn-name').value||'Sem título',
+    type:curNoteType,
+    date:document.getElementById('mn-date').value||new Date().toISOString().split('T')[0],
+    body:document.getElementById('mn-body').value||'',
+    links:[...curNoteLinks]
+  };
   if(id){const i=S.notes.findIndex(x=>x.id===id);if(i>=0)S.notes[i]=n;}
   else S.notes.push(n);
+  applyBidirectionalLinks(n.id, n.links, oldLinks);
   sv(); cl('modal-note'); renderNotes(); toast('Anotação salva ✓');
 }
 
@@ -1344,6 +1428,245 @@ function delNote(){
   if(!id||!confirm('Excluir anotação?'))return;
   S.notes=S.notes.filter(x=>x.id!==id);
   sv(); cl('modal-note'); renderNotes(); toast('Anotação excluída');
+}
+
+
+// ── JSON PARSER UTILITIES ─────────────────────────────────────────────────
+function toggleJsonPanel(panelId, btn){
+  const p = document.getElementById(panelId);
+  p.classList.toggle('open');
+  btn.textContent = p.classList.contains('open')
+    ? btn.textContent.replace('▾','▴')
+    : btn.textContent.replace('▴','▾');
+}
+
+function parseEntries(entries){
+  // Resolve 5etools tags: {@atk mw} {@hit 4} {@damage 1d6} {@h} {@creature X} {@status X}
+  if(!entries || !entries.length) return '';
+  return entries.map(e => {
+    if(typeof e === 'string'){
+      return e
+        .replace(/\{@atk mw,rw\}/g,'Corpo a corpo ou Distância:')
+        .replace(/\{@atk mw\}/g,'Corpo a corpo:')
+        .replace(/\{@atk rw\}/g,'Distância:')
+        .replace(/\{@hit (\d+)\}/g,'$1 para acertar')
+        .replace(/\{@h\}/g,'Acerto: ')
+        .replace(/\{@damage ([^}]+)\}/g,'$1')
+        .replace(/\{@dc (\d+)\}/g,'CD $1')
+        .replace(/\{@creature ([^}|]+)[^}]*\}/g,'$1')
+        .replace(/\{@status ([^}|]+)[^}]*\}/g,'$1')
+        .replace(/\{@condition ([^}|]+)[^}]*\}/g,'$1')
+        .replace(/\{@spell ([^}|]+)[^}]*\}/g,'$1')
+        .replace(/\{@item ([^}|]+)[^}]*\}/g,'$1')
+        .replace(/\{@recharge (\d+)(?:-(\d+))?\}/g,'(Recarga $1–$2)')
+        .replace(/\{@recharge\}/g,'(Recarga)')
+        .replace(/\{@[a-z]+ ([^}|]+)[^}]*\}/g,'$1');
+    }
+    if(typeof e === 'object' && e.entries) return e.name + ': ' + parseEntries(e.entries);
+    return '';
+  }).filter(Boolean).join(' ');
+}
+
+function sizeLabel(s){
+  const m={T:'Tiny',S:'Small',M:'Medium',L:'Large',H:'Huge',G:'Gargantuan'};
+  return (Array.isArray(s)?s.map(x=>m[x]||x):m[s]||s||'').toString();
+}
+
+function speedStr(sp){
+  if(!sp) return '';
+  return Object.entries(sp).map(([k,v])=>`${v}ft ${k}`).join(', ');
+}
+
+function alignStr(al){
+  if(!al||!al.length) return '';
+  const m={L:'Legal',N:'Neutro',C:'Caótico',G:'Bom',E:'Mau'};
+  return al.map(x=>m[x]||x).join(' ');
+}
+
+function parse5eJSON(raw){
+  let data;
+  try { data = JSON.parse(raw); } catch(e){ return null; }
+  // Support both single object and {monster:[...]} array format
+  if(Array.isArray(data)) data = data[0];
+  if(data.monster) data = data.monster[0];
+  return data;
+}
+
+// Parse for undead/monster card
+function parseUndeadJSON(){
+  const raw = document.getElementById('mu-json').value.trim();
+  const err = document.getElementById('mu-json-err');
+  const ok  = document.getElementById('mu-json-ok');
+  err.style.display='none'; ok.style.display='none';
+
+  const d = parse5eJSON(raw);
+  if(!d){ err.style.display='block'; return; }
+
+  // Name
+  document.getElementById('mu-name').value = d.name || '';
+
+  // Type string
+  const typeStr = d.type
+    ? (typeof d.type === 'string' ? d.type : `${sizeLabel(d.size)} ${d.type.type||d.type}${d.type.tags?' ('+d.type.tags.join(', ')+')':''}`)
+    : sizeLabel(d.size)||'';
+  document.getElementById('mu-type').value = typeStr + (d.alignment ? ', '+alignStr(d.alignment) : '');
+
+  // AC
+  const ac = Array.isArray(d.ac) ? (typeof d.ac[0]==='number'?d.ac[0]:d.ac[0].ac||d.ac[0]) : d.ac||'';
+  document.getElementById('mu-ca').value = ac;
+
+  // HP
+  const hp = d.hp ? (d.hp.average || d.hp) : '';
+  document.getElementById('mu-hp').value = hp;
+  document.getElementById('mu-hpcur').value = hp;
+
+  // Speed
+  document.getElementById('mu-speed').value = speedStr(d.speed);
+
+  // Attributes
+  ['str','dex','con','int','wis','cha'].forEach(k=>{
+    if(d[k]!==undefined) document.getElementById('mu-'+k).value = d[k];
+  });
+
+  // Skills + senses
+  const skillParts = [];
+  if(d.skill) Object.entries(d.skill).forEach(([k,v])=>skillParts.push(k+' '+v));
+  if(d.passive) skillParts.push('Percepção Passiva '+d.passive);
+  if(d.senses) skillParts.push(...(Array.isArray(d.senses)?d.senses:[d.senses]));
+  if(d.languages) skillParts.push('Idiomas: '+(Array.isArray(d.languages)?d.languages.join(', '):d.languages));
+  if(d.cr) skillParts.push('ND '+d.cr);
+  document.getElementById('mu-skills').value = skillParts.join(' · ');
+
+  // Traits / features
+  const traitParts = [];
+  if(d.trait) d.trait.forEach(t=>traitParts.push(t.name+'.\n'+parseEntries(t.entries)));
+  if(d.reaction) d.reaction.forEach(r=>traitParts.push('[Reação] '+r.name+'.\n'+parseEntries(r.entries)));
+  if(d.legendary) d.legendary.forEach(l=>traitParts.push('[Lendário] '+l.name+'.\n'+parseEntries(l.entries)));
+  document.getElementById('mu-traits').value = traitParts.join('\n\n');
+
+  // Actions
+  const actionParts = [];
+  if(d.action) d.action.forEach(a=>actionParts.push(a.name+'.\n'+parseEntries(a.entries)));
+  if(d.bonus) d.bonus.forEach(b=>actionParts.push('[Bônus] '+b.name+'.\n'+parseEntries(b.entries)));
+  document.getElementById('mu-actions').value = actionParts.join('\n\n');
+
+  ok.style.display='block';
+  ok.textContent = '✓ Preenchido: '+d.name+(d.source?' ('+d.source+')'):'';
+}
+
+// Parse for NPC note
+function parseNoteJSON(){
+  const raw = document.getElementById('mn-json').value.trim();
+  const err = document.getElementById('mn-json-err');
+  const ok  = document.getElementById('mn-json-ok');
+  err.style.display='none'; ok.style.display='none';
+
+  const d = parse5eJSON(raw);
+  if(!d){ err.style.display='block'; return; }
+
+  document.getElementById('mn-name').value = d.name || '';
+
+  // Build description text
+  const lines = [];
+  if(d.type || d.size) lines.push(`Tipo: ${sizeLabel(d.size)} ${typeof d.type==='string'?d.type:d.type?.type||''}, ${alignStr(d.alignment||[])}`);
+  if(d.ac) lines.push(`CA: ${Array.isArray(d.ac)?d.ac[0]:d.ac}`);
+  if(d.hp) lines.push(`HP: ${d.hp.average||d.hp} (${d.hp.formula||''})`);
+  if(d.speed) lines.push(`Velocidade: ${speedStr(d.speed)}`);
+  if(d.cr) lines.push(`ND: ${d.cr}`);
+  const attrs = ['str','dex','con','int','wis','cha'].map(k=>k.toUpperCase()+' '+(d[k]||10)).join(' | ');
+  lines.push(attrs);
+  if(d.skill) lines.push('Perícias: '+Object.entries(d.skill).map(([k,v])=>k+' '+v).join(', '));
+  if(d.senses) lines.push('Sentidos: '+(Array.isArray(d.senses)?d.senses.join(', '):d.senses));
+  if(d.languages) lines.push('Idiomas: '+(Array.isArray(d.languages)?d.languages.join(', '):d.languages));
+  if(d.trait) { lines.push(''); d.trait.forEach(t=>lines.push(t.name+'. '+parseEntries(t.entries))); }
+  if(d.action) { lines.push(''); lines.push('AÇÕES:'); d.action.forEach(a=>lines.push(a.name+'. '+parseEntries(a.entries))); }
+
+  document.getElementById('mn-body').value = lines.join('\n');
+  // Auto-set type to NPC
+  curNoteType = 'npc';
+  document.querySelectorAll('#mn-types .nmt').forEach(b=>{
+    const t=b.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    b.classList.toggle('sel', t==='npc');
+  });
+  ok.style.display='block';
+}
+
+// ── BIDIRECTIONAL NOTE LINKS ──────────────────────────────────────────────
+let curNoteLinks = []; // array of note ids currently being edited
+
+function initNoteLinks(existingLinks){
+  curNoteLinks = existingLinks ? [...existingLinks] : [];
+  renderLinkChips();
+  document.getElementById('mn-link-picker').classList.remove('open');
+}
+
+function renderLinkChips(){
+  const el = document.getElementById('mn-link-chips'); if(!el) return;
+  if(!curNoteLinks.length){ el.innerHTML='<span style="font-size:11px;color:var(--muted);">Nenhum vínculo ainda.</span>'; return; }
+  el.innerHTML = curNoteLinks.map(lid=>{
+    const n = S.notes.find(x=>x.id===lid);
+    if(!n) return '';
+    const t = NOTE_TYPES[n.type]||NOTE_TYPES.outros;
+    return `<span class="link-chip linked">
+      <span class="note-type-pill ${t.cls}" style="padding:0 5px;">${t.label.split(' ')[0]}</span>
+      ${n.name}
+      <span class="lx" onclick="removeLink('${lid}')">×</span>
+    </span>`;
+  }).filter(Boolean).join('');
+}
+
+function removeLink(lid){
+  curNoteLinks = curNoteLinks.filter(x=>x!==lid);
+  renderLinkChips();
+}
+
+function toggleLinkPicker(){
+  const p = document.getElementById('mn-link-picker');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')){ renderLinkPicker(); document.getElementById('lp-search').focus(); }
+}
+
+function renderLinkPicker(){
+  const q = (document.getElementById('lp-search').value||'').toLowerCase();
+  const editId = document.getElementById('mn-id').value;
+  const candidates = (S.notes||[]).filter(n=>
+    n.id !== editId &&
+    !curNoteLinks.includes(n.id) &&
+    (n.name||'').toLowerCase().includes(q)
+  );
+  const el = document.getElementById('lp-items');
+  if(!candidates.length){ el.innerHTML='<div class="lp-item" style="color:var(--muted);">Nenhuma anotação encontrada</div>'; return; }
+  el.innerHTML = candidates.map(n=>{
+    const t = NOTE_TYPES[n.type]||NOTE_TYPES.outros;
+    return `<div class="lp-item" onclick="addLink('${n.id}')">
+      <span class="note-type-pill ${t.cls}" style="padding:1px 6px;font-size:9px;">${t.label.split(' ')[0]}</span>
+      <span>${n.name}</span>
+    </div>`;
+  }).join('');
+}
+
+function addLink(lid){
+  if(!curNoteLinks.includes(lid)) curNoteLinks.push(lid);
+  renderLinkChips();
+  renderLinkPicker();
+  document.getElementById('mn-link-picker').classList.remove('open');
+}
+
+// Apply bidirectional links when saving a note
+function applyBidirectionalLinks(noteId, newLinks, oldLinks){
+  const removed = (oldLinks||[]).filter(id=>!newLinks.includes(id));
+  const added   = newLinks.filter(id=>!(oldLinks||[]).includes(id));
+  // Remove this note from notes that were unlinked
+  removed.forEach(lid=>{
+    const n = S.notes.find(x=>x.id===lid); if(!n) return;
+    n.links = (n.links||[]).filter(x=>x!==noteId);
+  });
+  // Add this note to newly linked notes
+  added.forEach(lid=>{
+    const n = S.notes.find(x=>x.id===lid); if(!n) return;
+    if(!n.links) n.links=[];
+    if(!n.links.includes(noteId)) n.links.push(noteId);
+  });
 }
 
 // QUIMERA VENENOSA
