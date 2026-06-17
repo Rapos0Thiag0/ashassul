@@ -776,7 +776,7 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
     <div class="fg"><div class="fl">Ataques & Ações</div><textarea class="fta" id="mu-actions" placeholder="Mordida. +5 para acertar, 1,5m — 1d8+3 perfurante..." style="min-height:70px;"></textarea></div>
     <button class="json-toggle" onclick="toggleJsonPanel('mu-json-panel',this)">📋 Colar JSON 5etools para preencher automaticamente ▾</button>
     <div class="json-panel" id="mu-json-panel">
-      <textarea class="json-input" id="mu-json" placeholder='Cole aqui o JSON do 5etools...' rows="5"></textarea>
+      <textarea class="json-input" id="mu-json" placeholder="Cole aqui o JSON do 5etools..." rows="5"></textarea>
       <button class="json-parse-btn" onclick="parseUndeadJSON()">⚡ Preencher campos automaticamente</button>
       <div class="json-err" id="mu-json-err">JSON inválido — verifique o formato.</div>
       <div class="json-ok" id="mu-json-ok">✓ Campos preenchidos com sucesso!</div>
@@ -812,7 +812,7 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
     <div id="mn-json-wrapper">
       <button class="json-toggle" onclick="toggleJsonPanel('mn-json-panel',this)">📋 Colar JSON 5etools (NPC) ▾</button>
       <div class="json-panel" id="mn-json-panel">
-        <textarea class="json-input" id="mn-json" placeholder='Cole aqui o JSON do 5etools...' rows="4"></textarea>
+        <textarea class="json-input" id="mn-json" placeholder="Cole aqui o JSON do 5etools..." rows="4"></textarea>
         <button class="json-parse-btn" onclick="parseNoteJSON()">⚡ Preencher nome e descrição</button>
         <div class="json-err" id="mn-json-err">JSON inválido.</div>
         <div class="json-ok" id="mn-json-ok">✓ Preenchido!</div>
@@ -1551,7 +1551,7 @@ function parseUndeadJSON(){
   document.getElementById('mu-actions').value = actionParts.join('\n\n');
 
   ok.style.display='block';
-  ok.textContent = '✓ Preenchido: '+d.name+(d.source?' ('+d.source+')'):'';
+  ok.textContent = '✓ Preenchido: '+d.name+(d.source ? ' ('+d.source+')' : '');
 }
 
 // Parse for NPC note
