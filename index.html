@@ -278,7 +278,6 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
 .qv-dmg-val{font-size:15px;font-weight:700;color:#fff;}
 .qv-dmg-type-pill{font-size:11px;padding:2px 10px;border-radius:20px;font-weight:500;}
 
-
 /* CONVOCAR MORTO VIVO */
 .cmv-card{background:rgba(80,60,120,0.08);border:.5px solid rgba(120,80,180,0.3);border-radius:var(--r);overflow:hidden;margin-bottom:7px;}
 .cmv-head{display:flex;align-items:center;gap:8px;padding:11px 13px;cursor:pointer;user-select:none;}
@@ -341,7 +340,6 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
 .nmt:not(.sel){opacity:.45;}
 .nmt.sel{opacity:1;}
 
-
 /* JSON PARSER AREA */
 .json-toggle{width:100%;background:rgba(239,159,39,0.08);border:.5px dashed rgba(239,159,39,0.35);color:#fac775;font-size:11px;padding:8px 12px;border-radius:var(--r2);cursor:pointer;text-align:left;margin-bottom:8px;transition:background .15s;}
 .json-toggle:active{background:rgba(239,159,39,0.15);}
@@ -373,6 +371,34 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
 .note-links-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
 .nl-chip{font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(127,119,221,0.1);border:.5px solid var(--border);color:#afa9ec;}
 
+/* ── ITEM JSON PANEL — extra styles ── */
+.item-json-tabs{display:flex;gap:6px;margin-bottom:10px;}
+.ijt{flex:1;background:rgba(255,255,255,0.04);border:.5px solid var(--border);color:var(--muted);font-size:11px;padding:7px 6px;border-radius:var(--r2);cursor:pointer;text-align:center;transition:all .15s;}
+.ijt.on{background:rgba(239,159,39,0.12);border-color:rgba(239,159,39,0.4);color:#fac775;}
+.item-manual-form{display:none;}
+.item-manual-form.on{display:block;}
+.item-json-form{display:none;}
+.item-json-form.on{display:block;}
+/* rarity badge strip */
+.rarity-strip{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;}
+.rarity-btn{font-size:10px;padding:4px 10px;border-radius:20px;cursor:pointer;border:.5px solid;transition:all .15s;user-select:none;}
+.rarity-btn:not(.sel){opacity:.4;}
+.rarity-btn.sel{opacity:1;}
+.rb-none{background:rgba(180,180,180,0.1);border-color:rgba(180,180,180,0.3);color:#b0b0b0;}
+.rb-common{background:rgba(200,200,200,0.1);border-color:rgba(200,200,200,0.3);color:#d0d0d0;}
+.rb-uncommon{background:rgba(80,200,120,0.1);border-color:rgba(80,200,120,0.3);color:#60c890;}
+.rb-rare{background:rgba(80,120,220,0.1);border-color:rgba(80,120,220,0.3);color:#7090e0;}
+.rb-very{background:rgba(160,80,220,0.1);border-color:rgba(160,80,220,0.3);color:#c070e0;}
+.rb-legendary{background:rgba(220,140,40,0.1);border-color:rgba(220,140,40,0.3);color:#e0a040;}
+.rb-artifact{background:rgba(220,60,60,0.1);border-color:rgba(220,60,60,0.3);color:#e06060;}
+/* parsed item preview */
+.item-preview{background:rgba(255,255,255,0.03);border:.5px solid rgba(255,255,255,0.08);border-radius:var(--r2);padding:10px 12px;margin-top:8px;display:none;}
+.item-preview.on{display:block;}
+.ip-name{font-size:14px;font-weight:600;color:#fff;margin-bottom:2px;}
+.ip-type{font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:.5px;}
+.ip-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.ip-badge{font-size:10px;padding:2px 8px;border-radius:10px;}
+.ip-desc{font-size:11px;color:var(--sub);line-height:1.6;}
 </style>
 </head>
 <body>
@@ -552,7 +578,6 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
     <!-- AÇÕES -->
     <div id="tab-actions" class="tab">
       <div class="sec">Ações & Magias</div>
-      <!-- QUIMERA VENENOSA -->
       <div class="qv-card" id="qv-card">
         <div class="qv-head" onclick="toggleQV()">
           <div class="qv-name">Quimera Venenosa</div>
@@ -568,7 +593,6 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
         </div>
         <div class="qv-body" id="qv-body">
           <div class="qv-divider"></div>
-
           <div class="qv-section">Cargas Mágicas</div>
           <div id="qv-active-banner" style="display:none;">
             <div class="qv-active-row">
@@ -581,7 +605,6 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
             <button class="qv-charges-reset" onclick="resetQVCharges()">Amanhecer</button>
           </div>
           <div class="qv-pips" id="qv-pips"></div>
-
           <div class="qv-section">Tipo de Dano Ativo</div>
           <div class="dmg-types" id="qv-dmg-types">
             <span class="dt perf sel" onclick="selDmg(this,'perf','⚔️ Perfurante')">⚔️ Perfurante</span>
@@ -597,7 +620,6 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
             <div class="qv-dmg-val" id="qv-dmg-full">1d10+1</div>
             <div class="qv-dmg-type-pill" id="qv-dmg-pill" style="background:rgba(180,100,100,0.2);border:.5px solid rgba(180,100,100,0.5);color:#e0a0a0;">⚔️ Perfurante</div>
           </div>
-
           <div class="qv-section">Descrição</div>
           <div class="qv-desc">
             Pistola gnômica fabricada pelos artesãos da <b>Floresta de Syvarion</b>, continente de Sécklos. Ganha por Ashassul em uma aposta no <b>Deserto de Fuhuk</b>, a caminho de Gaylen.<br><br>
@@ -608,7 +630,6 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
         </div>
       </div>
       <div class="action-card spell"><div class="ac-head"><div class="ac-name">Forma de Cobra</div><span class="ac-type spell">Spell</span><span class="ac-lvl">Lv 1</span></div><div class="ac-note">Transformação — veja aba Formas. Usa contador 3/Desc. Longo.</div></div>
-      <!-- CONVOCAR MORTO VIVO -->
       <div class="cmv-card" id="cmv-card">
         <div class="cmv-head" onclick="toggleCMV()">
           <span class="ac-type spell" style="font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(127,119,221,0.15);color:#c4c0f0;">Spell</span>
@@ -619,9 +640,7 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
         <div class="cmv-body" id="cmv-body">
           <div class="cmv-divider"></div>
           <div class="cmv-section">Descrição</div>
-          <div class="cmv-desc">
-            Conjura um ou mais mortos-vivos para servir ao conjurador temporariamente. Os servos obedecem ordens simples e agem na iniciativa do conjurador. Eles retornam ao plano dos mortos ao amanhecer ou quando destruídos.
-          </div>
+          <div class="cmv-desc">Conjura um ou mais mortos-vivos para servir ao conjurador temporariamente. Os servos obedecem ordens simples e agem na iniciativa do conjurador. Eles retornam ao plano dos mortos ao amanhecer ou quando destruídos.</div>
           <div class="cmv-section">Servos Ativos</div>
           <div id="cmv-list"></div>
           <button class="cmv-add-btn" onclick="openNewUndead()">+ Adicionar Morto-Vivo</button>
@@ -652,34 +671,27 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
     <div id="tab-coins" class="tab">
       <div class="sec">Carteira</div>
       <div class="coins-grid">
-        <div class="coin-card pc"><div class="coin-label">PC · Cobre</div><input class="coin-input" type="number" id="c-pc" value="0" min="0" oninput="saveCoin("pc",this.value);calcTotal()"><div class="coin-sub">10 PC = 1 PP</div></div>
-        <div class="coin-card pp"><div class="coin-label">PP · Prata</div><input class="coin-input" type="number" id="c-pp" value="0" min="0" oninput="saveCoin("pp",this.value);calcTotal()"><div class="coin-sub">10 PP = 1 PE</div></div>
-        <div class="coin-card pe"><div class="coin-label">PE · Electrum</div><input class="coin-input" type="number" id="c-pe" value="0" min="0" oninput="saveCoin("pe",this.value);calcTotal()"><div class="coin-sub">10 PE = 1 PO</div></div>
-        <div class="coin-card po"><div class="coin-label">PO · Ouro</div><input class="coin-input" type="number" id="c-po" value="0" min="0" oninput="saveCoin("po",this.value);calcTotal()"><div class="coin-sub">10 PO = 1 PL</div></div>
+        <div class="coin-card pc"><div class="coin-label">PC · Cobre</div><input class="coin-input" type="number" id="c-pc" value="0" min="0" oninput="saveCoin('pc',this.value);calcTotal()"><div class="coin-sub">10 PC = 1 PP</div></div>
+        <div class="coin-card pp"><div class="coin-label">PP · Prata</div><input class="coin-input" type="number" id="c-pp" value="0" min="0" oninput="saveCoin('pp',this.value);calcTotal()"><div class="coin-sub">10 PP = 1 PE</div></div>
+        <div class="coin-card pe"><div class="coin-label">PE · Electrum</div><input class="coin-input" type="number" id="c-pe" value="0" min="0" oninput="saveCoin('pe',this.value);calcTotal()"><div class="coin-sub">10 PE = 1 PO</div></div>
+        <div class="coin-card po"><div class="coin-label">PO · Ouro</div><input class="coin-input" type="number" id="c-po" value="0" min="0" oninput="saveCoin('po',this.value);calcTotal()"><div class="coin-sub">10 PO = 1 PL</div></div>
       </div>
       <div class="coins-grid" style="grid-template-columns:1fr;">
-        <div class="coin-card pl"><div class="coin-label">PL · Platina</div><input class="coin-input" type="number" id="c-pl" value="0" min="0" oninput="saveCoin("pl",this.value);calcTotal()"><div class="coin-sub">1 PL = 10 PO = 100 PE = 1.000 PP = 10.000 PC</div></div>
+        <div class="coin-card pl"><div class="coin-label">PL · Platina</div><input class="coin-input" type="number" id="c-pl" value="0" min="0" oninput="saveCoin('pl',this.value);calcTotal()"><div class="coin-sub">1 PL = 10 PO = 100 PE = 1.000 PP = 10.000 PC</div></div>
       </div>
       <div class="total-po"><div><div class="total-po-label">Total em Peças de Ouro</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">PL×1000 + PO×10 + PE + PP÷10 + PC÷100 (via PP)</div></div><div class="total-po-val" id="total-po">0 PO</div></div>
-
       <div class="converter-box">
         <div class="conv-title">Conversor</div>
         <div class="conv-row">
           <input class="conv-in" type="number" id="conv-amt" placeholder="100" oninput="runConv()">
           <select class="conv-sel" id="conv-from" onchange="runConv()">
-            <option value="pc">PC</option>
-            <option value="pp">PP</option>
-            <option value="pe">PE</option>
-            <option value="po" selected>PO</option>
-            <option value="pl">PL</option>
+            <option value="pc">PC</option><option value="pp">PP</option><option value="pe">PE</option>
+            <option value="po" selected>PO</option><option value="pl">PL</option>
           </select>
           <span class="conv-arrow">→</span>
           <select class="conv-sel" id="conv-to" onchange="runConv()">
-            <option value="pc">PC</option>
-            <option value="pp">PP</option>
-            <option value="pe">PE</option>
-            <option value="po">PO</option>
-            <option value="pl" selected>PL</option>
+            <option value="pc">PC</option><option value="pp">PP</option><option value="pe">PE</option>
+            <option value="po">PO</option><option value="pl" selected>PL</option>
           </select>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
@@ -714,7 +726,6 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
       <div id="d-hist" style="font-size:12px;color:var(--muted);"></div>
     </div>
 
-
     <!-- NOTAS -->
     <div id="tab-notes" class="tab">
       <input class="notes-search" type="text" id="notes-search" placeholder="Buscar por nome, local, NPC..." oninput="renderNotes()">
@@ -744,7 +755,6 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
   </div>
 </div>
 
-
 <!-- MODAL MORTO VIVO -->
 <div class="overlay" id="modal-undead" onclick="clOut(event,'modal-undead')">
   <div class="modal">
@@ -772,8 +782,8 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
       </div>
     </div>
     <div class="fg"><div class="fl">Perícias & Sentidos</div><input class="fi" type="text" id="mu-skills" placeholder="Furtividade +7, Visão escura 18m..."></div>
-    <div class="fg"><div class="fl">Habilidades Especiais</div><textarea class="fta" id="mu-traits" placeholder="Spider Climb. A aranha pode escalar superfícies difíceis..." style="min-height:60px;"></textarea></div>
-    <div class="fg"><div class="fl">Ataques & Ações</div><textarea class="fta" id="mu-actions" placeholder="Mordida. +5 para acertar, 1,5m — 1d8+3 perfurante..." style="min-height:70px;"></textarea></div>
+    <div class="fg"><div class="fl">Habilidades Especiais</div><textarea class="fta" id="mu-traits" placeholder="Spider Climb..." style="min-height:60px;"></textarea></div>
+    <div class="fg"><div class="fl">Ataques & Ações</div><textarea class="fta" id="mu-actions" placeholder="Mordida. +5 para acertar..." style="min-height:70px;"></textarea></div>
     <button class="json-toggle" onclick="toggleJsonPanel('mu-json-panel',this)">📋 Colar JSON 5etools para preencher automaticamente ▾</button>
     <div class="json-panel" id="mu-json-panel">
       <textarea class="json-input" id="mu-json" placeholder="Cole aqui o JSON do 5etools..." rows="5"></textarea>
@@ -843,25 +853,93 @@ html,body{height:100%;background:var(--dark);color:var(--text);font-family:-appl
     <div class="mhandle"></div>
     <div class="mtitle" id="mi-title">Item</div>
     <input type="hidden" id="mi-id">
+
+    <!-- ══ JSON IMPORT PANEL ══ -->
+    <button class="json-toggle" onclick="toggleJsonPanel('mi-json-panel',this)" id="mi-json-toggle">
+      📋 Importar do 5etools (JSON ou texto) ▾
+    </button>
+    <div class="json-panel" id="mi-json-panel">
+      <!-- tabs: JSON / Manual text -->
+      <div class="item-json-tabs">
+        <div class="ijt on" id="ijtab-json" onclick="switchItemImportTab('json')">📄 JSON 5etools</div>
+        <div class="ijt" id="ijtab-text" onclick="switchItemImportTab('text')">✏️ Texto Manual</div>
+      </div>
+
+      <!-- JSON tab -->
+      <div class="item-json-form on" id="ij-json-form">
+        <textarea class="json-input" id="mi-json" placeholder='Cole o JSON do 5etools aqui...
+Ex: {"name":"Acid (vial)","type":"G","rarity":"none","value":2500,"weight":1,"entries":["As an action..."]}' rows="6"></textarea>
+        <button class="json-parse-btn" onclick="parseItemJSON()">⚡ Preencher campos automaticamente</button>
+      </div>
+
+      <!-- Manual text tab -->
+      <div class="item-manual-form" id="ij-text-form">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px;line-height:1.6;">
+          Cole o texto da entrada do item (no estilo do livro). O sistema vai extrair nome, tipo, peso, custo e descrição.
+        </div>
+        <textarea class="json-input" id="mi-text" placeholder="Pride Silk Outfit
+Adventuring gear
+500 gp, 4 lb.
+
+An outfit made of pride silk weighs 4 pounds and costs 500 gp. If you aren't wearing armor, your base Armor Class is 11 + your Dexterity modifier while wearing it." rows="7" style="color:var(--sub);"></textarea>
+        <button class="json-parse-btn" onclick="parseItemText()">⚡ Extrair informações do texto</button>
+      </div>
+
+      <div class="json-err" id="mi-json-err">Formato inválido — verifique o conteúdo.</div>
+      <div class="json-ok" id="mi-json-ok">✓ Campos preenchidos!</div>
+
+      <!-- Preview card -->
+      <div class="item-preview" id="mi-preview">
+        <div class="ip-name" id="ip-name">—</div>
+        <div class="ip-type" id="ip-type">—</div>
+        <div class="ip-meta" id="ip-meta"></div>
+        <div class="ip-desc" id="ip-desc"></div>
+      </div>
+    </div>
+    <!-- ══ END JSON PANEL ══ -->
+
     <div class="fg"><div class="fl">Nome</div><input class="fi" type="text" id="mi-name" placeholder="Nome do item"></div>
     <div class="fg"><div class="fl">Tipo</div>
       <select class="fsel" id="mi-type">
-        <option value="Weapon">⚔️ Weapon</option><option value="Armour">🛡️ Armour</option>
-        <option value="Potions/poisons">🧪 Potions/Poisons</option><option value="Alquimia">⚗️ Alquimia</option>
-        <option value="Tool">🔧 Tool</option><option value="Trading/Currency">💎 Trading/Currency</option>
-        <option value="Food/Water">🍖 Food/Water</option><option value="Clothing">👗 Clothing</option>
+        <option value="Weapon">⚔️ Weapon</option>
+        <option value="Armour">🛡️ Armour</option>
+        <option value="Potions/poisons">🧪 Potions/Poisons</option>
+        <option value="Alquimia">⚗️ Alquimia</option>
+        <option value="Tool">🔧 Tool</option>
+        <option value="Trading/Currency">💎 Trading/Currency</option>
+        <option value="Food/Water">🍖 Food/Water</option>
+        <option value="Clothing">👗 Clothing</option>
       </select>
     </div>
     <div class="fg"><div class="fl">Status</div>
       <select class="fsel" id="mi-status">
-        <option value="Backpack">🎒 Backpack</option><option value="Mansão">🏛️ Mansão</option><option value="Descartado">🗑️ Descartado</option>
+        <option value="Backpack">🎒 Backpack</option>
+        <option value="Mansão">🏛️ Mansão</option>
+        <option value="Descartado">🗑️ Descartado</option>
       </select>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
       <div class="fg"><div class="fl">Qtd.</div><input class="fi" type="text" id="mi-qty" placeholder="1"></div>
       <div class="fg"><div class="fl">Bônus/Dano</div><input class="fi" type="text" id="mi-bonus" placeholder="+1, 1d8..."></div>
     </div>
+    <div class="fg"><div class="fl">Peso & Custo</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <input class="fi" type="text" id="mi-weight" placeholder="4 lb.">
+        <input class="fi" type="text" id="mi-cost" placeholder="500 gp">
+      </div>
+    </div>
     <div class="fg" onclick="togMag()"><div class="tog-row"><span class="tog-lbl">✦ Item Mágico</span><div class="tog" id="mi-mag-tog"></div></div></div>
+    <div class="fg"><div class="fl">Raridade</div>
+      <div class="rarity-strip" id="mi-rarity-strip">
+        <span class="rarity-btn rb-none sel" onclick="selRarity(this,'none')">Comum</span>
+        <span class="rarity-btn rb-uncommon" onclick="selRarity(this,'uncommon')">Incomum</span>
+        <span class="rarity-btn rb-rare" onclick="selRarity(this,'rare')">Raro</span>
+        <span class="rarity-btn rb-very" onclick="selRarity(this,'very rare')">Muito Raro</span>
+        <span class="rarity-btn rb-legendary" onclick="selRarity(this,'legendary')">Lendário</span>
+        <span class="rarity-btn rb-artifact" onclick="selRarity(this,'artifact')">Artefato</span>
+      </div>
+    </div>
+    <input type="hidden" id="mi-rarity" value="none">
     <div class="fg"><div class="fl">Descrição</div><textarea class="fta" id="mi-desc" placeholder="Efeito, história, uso..."></textarea></div>
     <div class="mbtns">
       <button class="mb-cancel" onclick="cl('modal-item')">Cancelar</button>
@@ -890,92 +968,92 @@ const KEY='ashassul_v4';
 function ld(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r);}catch(e){}return null;}
 function sv(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 const ITEMS=[
-  {id:'1',name:'Arco Longo',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'2',name:'Rapieira',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'3',name:'Mosquete',type:'Weapon',status:'Backpack',qty:'1',bonus:'2d8',magic:false,desc:''},
-  {id:'4',name:'Espada Longa',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'5',name:'Adaga',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'6',name:'Lança',type:'Weapon',status:'Backpack',qty:'2',bonus:'',magic:false,desc:''},
-  {id:'7',name:'Glaive',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'8',name:'Alabarda',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'9',name:'Varinha da Paralisia',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'10',name:'Varinha Mágica',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'11',name:'Flecha Inquebrável',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'12',name:'Flecha de Assassinato',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'13',name:'Armadura Média',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'14',name:'Armadura de Couro Batido',type:'Armour',status:'Backpack',qty:'2',bonus:'',magic:false,desc:''},
-  {id:'15',name:'Armadura Full Plate',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'16',name:'Armadura da Invulnerabilidade',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'17',name:'Escudo',type:'Armour',status:'Backpack',qty:'2',bonus:'',magic:false,desc:''},
-  {id:'18',name:'Anel da Dríade',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'19',name:'Tiara do Rei Igris',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'20',name:'Anel de Calor',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'21',name:'Anel do Escudo Mental',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'22',name:'Botas Élficas',type:'Clothing',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'23',name:'Óculos Anti-Basílisco',type:'Tool',status:'Backpack',qty:'3',bonus:'',magic:false,desc:''},
-  {id:'24',name:'Bag of Holding',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'25',name:'Kit de Veneno',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'26',name:'Kit de Disfarce',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'27',name:'Kit de 1º Socorros',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'28',name:'Par de Dados Cravejados',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'29',name:'Corda',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'30',name:'Pack de Viagem',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'31',name:'Gema da Luminosidade',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'32',name:'Amuleto Detectar Localização',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'33',name:'Poção de Cura',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'2d4+2',magic:true,desc:''},
-  {id:'34',name:'Poção de Cura Maior',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'4d4+4',magic:true,desc:''},
-  {id:'35',name:'Poção Restauração Menor',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'36',name:'Poção do Sopro de Fogo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'37',name:'Poção da Forma Gasosa',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'38',name:"Poção de Respirar n'Água",type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'39',name:'Poção de Resistência ao Fogo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'40',name:'Poção de Ler Mentes',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'41',name:'Poção da Amizade Animal',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'42',name:'Poção do Heroísmo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'43',name:'Poção do Gigante de Fogo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'44',name:'Poção da Clarividência',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'45',name:'Poção da Invulnerabilidade',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'46',name:'Veneno Simples',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'47',name:'Pó do Desaparecimento',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'48',name:'Bolsa de Fogo ½ Dragão',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'49',name:'Bolsa de Veneno ½ Dragão',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'50',name:'Ácido',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'51',name:'Mercúrio',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'52',name:'Ovo de Slime de Fogo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'53',name:'Gordura de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'54',name:'Sangue de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'55',name:'Dentes de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'56',name:'Olhos de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'57',name:'Unha de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'58',name:'Olhos de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'59',name:'Garra de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'60',name:'Óleo de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'61',name:'Tentáculo de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'62',name:'Caninos de Ywern das Sombras',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'63',name:'Olhos de Meio Dragão',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'64',name:'Pele de Blink Dog Trançada',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'65',name:'Pergaminho Animar Objetos',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'66',name:'Pergaminho Antagonizar',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'67',name:'Pergaminho Demi Plano',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'68',name:'Pergaminho Comando',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'69',name:'Pergaminho Detectar Magia',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'70',name:'Pergaminho Curar Ferimentos',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'71',name:'Pergaminho Distorcer Valor',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'72',name:'Pergaminho Passo sem Rastro',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'73',name:'Diamantes',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'74',name:'Jade',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'75',name:'Pedra Coral',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'76',name:'Olho de Tigre',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'77',name:'Turmalina',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'78',name:'Âmbar',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'79',name:'Citrina',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'80',name:'Zircônio',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'81',name:'Jasper',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'82',name:'Pedra da Lua',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'83',name:'Moeda do General Thoraff',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:true,desc:''},
-  {id:'84',name:'Fragmento Núcleo de Constructo',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'85',name:'Escultura de Animais Turquesa',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
-  {id:'86',name:'Vinho',type:'Food/Water',status:'Backpack',qty:'1',bonus:'',magic:false,desc:''},
+  {id:'1',name:'Arco Longo',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'2',name:'Rapieira',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'3',name:'Mosquete',type:'Weapon',status:'Backpack',qty:'1',bonus:'2d8',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'4',name:'Espada Longa',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'5',name:'Adaga',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'6',name:'Lança',type:'Weapon',status:'Backpack',qty:'2',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'7',name:'Glaive',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'8',name:'Alabarda',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'9',name:'Varinha da Paralisia',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'10',name:'Varinha Mágica',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'11',name:'Flecha Inquebrável',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'12',name:'Flecha de Assassinato',type:'Weapon',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'rare'},
+  {id:'13',name:'Armadura Média',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'14',name:'Armadura de Couro Batido',type:'Armour',status:'Backpack',qty:'2',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'15',name:'Armadura Full Plate',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'16',name:'Armadura da Invulnerabilidade',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'legendary'},
+  {id:'17',name:'Escudo',type:'Armour',status:'Backpack',qty:'2',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'18',name:'Anel da Dríade',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'rare'},
+  {id:'19',name:'Tiara do Rei Igris',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'very rare'},
+  {id:'20',name:'Anel de Calor',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'21',name:'Anel do Escudo Mental',type:'Armour',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'rare'},
+  {id:'22',name:'Botas Élficas',type:'Clothing',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'23',name:'Óculos Anti-Basílisco',type:'Tool',status:'Backpack',qty:'3',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'24',name:'Bag of Holding',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'25',name:'Kit de Veneno',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'26',name:'Kit de Disfarce',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'27',name:'Kit de 1º Socorros',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'28',name:'Par de Dados Cravejados',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'29',name:'Corda',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'30',name:'Pack de Viagem',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'31',name:'Gema da Luminosidade',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'32',name:'Amuleto Detectar Localização',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'33',name:'Poção de Cura',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'2d4+2',magic:true,desc:'',weight:'',cost:'50 gp',rarity:'common'},
+  {id:'34',name:'Poção de Cura Maior',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'4d4+4',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'35',name:'Poção Restauração Menor',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'36',name:'Poção do Sopro de Fogo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'37',name:'Poção da Forma Gasosa',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'rare'},
+  {id:'38',name:"Poção de Respirar n'Água",type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'39',name:'Poção de Resistência ao Fogo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'40',name:'Poção de Ler Mentes',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'rare'},
+  {id:'41',name:'Poção da Amizade Animal',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'42',name:'Poção do Heroísmo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'43',name:'Poção do Gigante de Fogo',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'rare'},
+  {id:'44',name:'Poção da Clarividência',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'rare'},
+  {id:'45',name:'Poção da Invulnerabilidade',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'rare'},
+  {id:'46',name:'Veneno Simples',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'47',name:'Pó do Desaparecimento',type:'Potions/poisons',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'48',name:'Bolsa de Fogo ½ Dragão',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'49',name:'Bolsa de Veneno ½ Dragão',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'50',name:'Ácido',type:'Alquimia',status:'Backpack',qty:'1',bonus:'2d6',magic:false,desc:'',weight:'1 lb.',cost:'25 gp',rarity:'none'},
+  {id:'51',name:'Mercúrio',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'52',name:'Ovo de Slime de Fogo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'53',name:'Gordura de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'54',name:'Sangue de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'55',name:'Dentes de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'56',name:'Olhos de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'57',name:'Unha de Gigante de Gelo',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'58',name:'Olhos de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'59',name:'Garra de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'60',name:'Óleo de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'61',name:'Tentáculo de Pantera Deslocadora',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'62',name:'Caninos de Ywern das Sombras',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'63',name:'Olhos de Meio Dragão',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'64',name:'Pele de Blink Dog Trançada',type:'Alquimia',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'65',name:'Pergaminho Animar Objetos',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'rare'},
+  {id:'66',name:'Pergaminho Antagonizar',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'67',name:'Pergaminho Demi Plano',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'very rare'},
+  {id:'68',name:'Pergaminho Comando',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'69',name:'Pergaminho Detectar Magia',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'70',name:'Pergaminho Curar Ferimentos',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'common'},
+  {id:'71',name:'Pergaminho Distorcer Valor',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'72',name:'Pergaminho Passo sem Rastro',type:'Tool',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'73',name:'Diamantes',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'74',name:'Jade',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'75',name:'Pedra Coral',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'76',name:'Olho de Tigre',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'77',name:'Turmalina',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'78',name:'Âmbar',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'79',name:'Citrina',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'80',name:'Zircônio',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'81',name:'Jasper',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'82',name:'Pedra da Lua',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'83',name:'Moeda do General Thoraff',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:true,desc:'',weight:'',cost:'',rarity:'uncommon'},
+  {id:'84',name:'Fragmento Núcleo de Constructo',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'85',name:'Escultura de Animais Turquesa',type:'Trading/Currency',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
+  {id:'86',name:'Vinho',type:'Food/Water',status:'Backpack',qty:'1',bonus:'',magic:false,desc:'',weight:'',cost:'',rarity:'none'},
 ];
 const DEF_UNDEAD=[{
   id:'u1',name:'Aranha Gigante',type:'Grande Besta · sem alinhamento',
@@ -995,6 +1073,9 @@ if(!S.undead)S.undead=JSON.parse(JSON.stringify(DEF_UNDEAD));
 if(!S.notes)S.notes=[];
 if(!S.qv)S.qv={open:false,charges:4,usedCharges:0,dmgType:"perf",magicActive:false};
 if(S.initBonus===undefined)S.initBonus=5;
+// patch existing items missing new fields
+S.items.forEach(i=>{if(!i.weight)i.weight='';if(!i.cost)i.cost='';if(!i.rarity)i.rarity='none';});
+
 function md(s){return Math.floor((s-10)/2);}
 function fm(m){return(m>=0?'+':'')+m;}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
@@ -1011,12 +1092,12 @@ function sw(name,btn){
   if(name==='actions')renderCMV();
 }
 function goStats(){sw('stats',document.querySelector('.nb'));setTimeout(()=>document.getElementById('hpc').scrollIntoView({behavior:'smooth'}),100);}
+
 // HP
 function calcHP(){
   const mx=parseInt(document.getElementById('in-hpmax').value)||S.hpMax;
   const dmg=parseInt(document.getElementById('in-dmg').value)||0;
   const temp=parseInt(document.getElementById('in-temp').value)||0;
-  // AUTO-SAVE: persist every change immediately
   S.hpMax=mx; S.hpDmg=dmg; S.hpTemp=temp; sv();
   const cur=Math.max(0,mx-dmg);
   const pct=Math.round(cur/mx*100);
@@ -1049,6 +1130,7 @@ function qDH(sign){
   calcHP();sv();toast(sign<0?'-'+v+' HP':'+'+v+' HP');
   document.getElementById('quick-val').value='';
 }
+
 // ATTRS
 const AL={str:'FORÇA',dex:'DESTREZA',con:'CONSTITUIÇÃO',int:'INTELIGÊNCIA',wis:'SABEDORIA',cha:'CARISMA'};
 function renderStats(){
@@ -1101,6 +1183,7 @@ function saveSE(){
   else if(curSEK==='init'){S.initBonus=parseInt(document.getElementById('se-ib').value)||0;}
   sv();renderStats();cl('modal-stat');toast('Salvo ✓');
 }
+
 // COUNTERS
 function renderPips(elId,key,max,cls){
   const el=document.getElementById(elId);if(!el)return;
@@ -1114,10 +1197,18 @@ function togPip(key,idx,max,cls){
 }
 function resetTrans(){S.counters.trans.used=0;sv();renderPips('pips-trans','trans',3,'used');toast('Formas resetadas ✓');}
 function resetConj(){S.counters.spray.used=0;S.counters.sug.used=0;sv();renderPips('pips-spray','spray',3,'snake-used');renderPips('pips-sug','sug',3,'snake-used');toast('Conjuração resetada ✓');}
+
 // INVENTORY
 let invF='all';
 const TM={Weapon:'weapon',Armour:'armour','Potions/poisons':'potion',Alquimia:'alq',Tool:'tool','Trading/Currency':'currency','Food/Water':'food',Clothing:'clothing'};
 const TL={Weapon:'Weapon',Armour:'Armour','Potions/poisons':'Poção',Alquimia:'Alquimia',Tool:'Ferramenta','Trading/Currency':'Moeda','Food/Water':'Comida',Clothing:'Roupa'};
+const RARITY_COLORS={
+  none:'color:#888;',common:'color:#aaa;',
+  uncommon:'color:#60c890;',rare:'color:#7090e0;',
+  'very rare':'color:#c070e0;',legendary:'color:#e0a040;',artifact:'color:#e06060;'
+};
+const RARITY_PT={none:'',common:'Comum',uncommon:'Incomum',rare:'Raro','very rare':'Muito Raro',legendary:'Lendário',artifact:'Artefato'};
+
 function setFilt(f,btn){invF=f;document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderInv();}
 function renderInv(){
   const q=(document.getElementById('inv-search').value||'').toLowerCase();
@@ -1129,34 +1220,346 @@ function renderInv(){
   });
   const el=document.getElementById('inv-list');
   if(!items.length){el.innerHTML='<div class="empty-state">Nenhum item encontrado</div>';return;}
-  el.innerHTML=items.map(i=>`
-    <div class="ii${i.magic?' magic':''}" onclick="openEdit('${i.id}')">
+  el.innerHTML=items.map(i=>{
+    const rarLabel=i.rarity&&i.rarity!=='none'?`<span class="it tool" style="${RARITY_COLORS[i.rarity]||''}">${RARITY_PT[i.rarity]||i.rarity}</span>`:'';
+    const metaLine=[];
+    if(i.weight)metaLine.push(i.weight);
+    if(i.cost)metaLine.push(i.cost);
+    return `<div class="ii${i.magic?' magic':''}" onclick="openEdit('${i.id}')">
       <div class="ii-top">${i.magic?'<div class="mdot"></div>':''}<div class="ii-name">${i.name}</div><div class="ii-qty">${i.qty||'1'}</div></div>
       <div class="ii-tags">
         <span class="it ${TM[i.type]||'tool'}">${TL[i.type]||i.type}</span>
         <span class="${i.status==='Backpack'?'sp-bp':i.status==='Mansão'?'sp-mn':'sp-dr'}">${i.status}</span>
         ${i.bonus?`<span class="it tool">${i.bonus}</span>`:''}
+        ${rarLabel}
       </div>
-      ${i.desc?`<div class="ii-note">${i.desc.substring(0,70)}${i.desc.length>70?'…':''}</div>`:''}
-    </div>`).join('');
+      ${metaLine.length?`<div class="ii-note">${metaLine.join(' · ')}</div>`:''}
+      ${i.desc?`<div class="ii-note">${i.desc.substring(0,80)}${i.desc.length>80?'…':''}</div>`:''}
+    </div>`;
+  }).join('');
 }
+
+// ─── ITEM JSON/TEXT IMPORT ────────────────────────────────────────────────
+let curItemImportTab = 'json';
+
+function switchItemImportTab(tab){
+  curItemImportTab = tab;
+  document.getElementById('ijtab-json').classList.toggle('on', tab==='json');
+  document.getElementById('ijtab-text').classList.toggle('on', tab==='text');
+  document.getElementById('ij-json-form').classList.toggle('on', tab==='json');
+  document.getElementById('ij-text-form').classList.toggle('on', tab==='text');
+  document.getElementById('mi-json-err').style.display='none';
+  document.getElementById('mi-json-ok').style.display='none';
+  document.getElementById('mi-preview').classList.remove('on');
+}
+
+// Maps 5etools item type codes → our internal types
+const TYPE_MAP_5E = {
+  'W':'Weapon','M':'Weapon','R':'Weapon','A':'Weapon', // melee, ranged, ammunition
+  'LA':'Armour','MA':'Armour','HA':'Armour','S':'Armour','AF':'Armour', // armor types
+  'P':'Potions/poisons','G':'Tool','T':'Tool','AT':'Tool', // gear, tools
+  'SC':'Tool', // scroll
+  '$':'Trading/Currency','GV':'Trading/Currency','TH':'Trading/Currency',
+  'FD':'Food/Water',
+  'CLK':'Clothing','WD':'Clothing',
+};
+
+function resolve5eEntries(entries){
+  if(!entries||!entries.length)return '';
+  return entries.map(e=>{
+    if(typeof e==='string'){
+      return e
+        .replace(/\{@atk mw,rw\}/g,'Corpo a corpo ou Distância:')
+        .replace(/\{@atk mw\}/g,'Corpo a corpo:')
+        .replace(/\{@atk rw\}/g,'Distância:')
+        .replace(/\{@hit (\d+)\}/g,'+$1 para acertar')
+        .replace(/\{@h\}/g,'Acerto: ')
+        .replace(/\{@damage ([^}]+)\}/g,'$1')
+        .replace(/\{@dc (\d+)\}/g,'CD $1')
+        .replace(/\{@dice ([^}]+)\}/g,'$1')
+        .replace(/\{@condition ([^}|]+)[^}]*\}/g,'$1')
+        .replace(/\{@spell ([^}|]+)[^}]*\}/g,'$1')
+        .replace(/\{@item ([^}|]+)[^}]*\}/g,'$1')
+        .replace(/\{@creature ([^}|]+)[^}]*\}/g,'$1')
+        .replace(/\{@status ([^}|]+)[^}]*\}/g,'$1')
+        .replace(/\{@recharge (\d+)(?:-(\d+))?\}/g,'(Recarga $1–$2)')
+        .replace(/\{@[a-z]+ ([^}|]+)[^}]*\}/g,'$1');
+    }
+    if(typeof e==='object'){
+      if(e.type==='entries'||e.type==='section') return (e.name?e.name+':\n':'')+resolve5eEntries(e.entries);
+      if(e.type==='list') return resolve5eEntries(e.items);
+      if(e.type==='table') return e.caption||'';
+      if(typeof e.entries!=='undefined') return (e.name?e.name+'. ':'')+resolve5eEntries(e.entries);
+    }
+    return '';
+  }).filter(Boolean).join('\n');
+}
+
+function cpGP(val){
+  // 5etools stores value in copper pieces; convert to gp string
+  if(!val)return '';
+  const gp=val/100;
+  if(gp===Math.floor(gp))return gp+' gp';
+  const sp=val/10;
+  if(sp===Math.floor(sp))return sp+' sp';
+  return val+' cp';
+}
+
+function parseItemJSON(){
+  const raw=document.getElementById('mi-json').value.trim();
+  const err=document.getElementById('mi-json-err');
+  const ok=document.getElementById('mi-json-ok');
+  err.style.display='none'; ok.style.display='none';
+  document.getElementById('mi-preview').classList.remove('on');
+
+  let d;
+  try{ d=JSON.parse(raw); }
+  catch(e){ err.textContent='JSON inválido — verifique o formato.'; err.style.display='block'; return; }
+
+  // Support {item:[...]} array format from 5etools export
+  if(Array.isArray(d)) d=d[0];
+  if(d.item) d=d.item[0];
+  if(d.baseitem) d=d.baseitem[0];
+
+  if(!d||!d.name){ err.textContent='Nenhum item encontrado no JSON.'; err.style.display='block'; return; }
+
+  // ── Fill fields ──
+  document.getElementById('mi-name').value = d.name||'';
+
+  // Type
+  const rawType = typeof d.type==='string' ? d.type.toUpperCase() : '';
+  const mappedType = TYPE_MAP_5E[rawType]||'Tool';
+  document.getElementById('mi-type').value = mappedType;
+
+  // Weight
+  const wt = d.weight ? d.weight+' lb.' : '';
+  document.getElementById('mi-weight').value = wt;
+
+  // Cost
+  const cost = cpGP(d.value);
+  document.getElementById('mi-cost').value = cost;
+
+  // Rarity
+  const rarity = (d.rarity||'none').toLowerCase().replace(/ /g,' ');
+  selRarityById(rarity);
+
+  // Magic
+  const isMagic = d.rarity && d.rarity!=='none' && d.rarity!=='unknown' && d.rarity!=='varies' && !['G','M','W','R','A','LA','MA','HA','S','FD','CLK'].includes(d.type||'');
+  document.getElementById('mi-mag-tog').className = 'tog'+(isMagic?' on':'');
+  eMag = isMagic;
+
+  // Bonus / damage
+  const bonusParts = [];
+  if(d.bonusWeapon) bonusParts.push(d.bonusWeapon);
+  if(d.bonusAc) bonusParts.push('CA '+d.bonusAc);
+  if(d.dmg1) bonusParts.push(d.dmg1+(d.dmgType?' '+d.dmgType:''));
+  if(d.bonusSpellAttack) bonusParts.push('Spell +'+d.bonusSpellAttack);
+  if(bonusParts.length) document.getElementById('mi-bonus').value = bonusParts.join(', ');
+
+  // Description — combine entries + additional effects
+  const descParts = [];
+  if(d.entries) descParts.push(resolve5eEntries(d.entries));
+  if(d.entriesTemplate) descParts.push(resolve5eEntries(d.entriesTemplate));
+  if(d.resist) descParts.push('Resistência: '+d.resist.join(', '));
+  if(d.immune) descParts.push('Imunidade: '+d.immune.join(', '));
+  if(d.conditionImmune) descParts.push('Imune à condição: '+d.conditionImmune.join(', '));
+  if(d.reqAttune) descParts.push('Requer sintonização'+(typeof d.reqAttune==='string'?' ('+d.reqAttune+')':'')+'.');
+  document.getElementById('mi-desc').value = descParts.filter(Boolean).join('\n\n');
+
+  // Show preview
+  showItemPreview(d.name, mappedType, rarity, wt, cost, isMagic, d.source, descParts.join('\n\n'));
+
+  ok.textContent = '✓ Preenchido: '+d.name+(d.source?' ('+d.source+(d.page?', p.'+d.page:'')+')':'');
+  ok.style.display='block';
+  toast('Item importado: '+d.name+' ✓');
+}
+
+function parseItemText(){
+  const raw=document.getElementById('mi-text').value.trim();
+  const err=document.getElementById('mi-json-err');
+  const ok=document.getElementById('mi-json-ok');
+  err.style.display='none'; ok.style.display='none';
+  document.getElementById('mi-preview').classList.remove('on');
+
+  if(!raw){ err.textContent='Cole o texto do item acima.'; err.style.display='block'; return; }
+
+  const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(!lines.length){ err.textContent='Texto vazio.'; err.style.display='block'; return; }
+
+  // Line 0: name
+  const name = lines[0];
+  document.getElementById('mi-name').value = name;
+
+  // Line 1: category hint (Adventuring gear, Weapon, Armor, Wondrous item, etc.)
+  const catLine = (lines[1]||'').toLowerCase();
+  let mappedType='Tool';
+  if(/weapon|sword|bow|axe|dagger|crossbow|gun|pistol|rifle/.test(catLine)) mappedType='Weapon';
+  else if(/armor|armour|shield/.test(catLine)) mappedType='Armour';
+  else if(/potion|poison|vial/.test(catLine)) mappedType='Potions/poisons';
+  else if(/clothing|outfit|robe|cloak/.test(catLine)) mappedType='Clothing';
+  else if(/food|ration|water/.test(catLine)) mappedType='Food/Water';
+  else if(/coin|gem|jewel|currency|gold/.test(catLine)) mappedType='Trading/Currency';
+  document.getElementById('mi-type').value = mappedType;
+
+  // Line 2 or later: look for "X gp, Y lb." pattern
+  let cost='',weight='';
+  for(const ln of lines){
+    const gpMatch = ln.match(/(\d[\d,]*(?:\.\d+)?)\s*(gp|sp|cp|pp)/i);
+    const lbMatch = ln.match(/(\d[\d,]*(?:\.\d+)?)\s*lb/i);
+    if(gpMatch && !cost) cost = gpMatch[1].replace(',','')+' '+gpMatch[2].toLowerCase();
+    if(lbMatch && !weight) weight = lbMatch[1]+' lb.';
+  }
+  document.getElementById('mi-cost').value = cost;
+  document.getElementById('mi-weight').value = weight;
+
+  // Rarity hints
+  const fullText = raw.toLowerCase();
+  let rarity='none';
+  if(/legendary/.test(fullText)) rarity='legendary';
+  else if(/very rare/.test(fullText)) rarity='very rare';
+  else if(/\brare\b/.test(fullText)) rarity='rare';
+  else if(/uncommon/.test(fullText)) rarity='uncommon';
+  else if(/wondrous|requires attunement|magic/.test(fullText)) rarity='uncommon';
+  selRarityById(rarity);
+
+  // Magic toggle: wondrous items, requires attunement, or non-none rarity
+  const isMagic = rarity!=='none' || /wondrous|requires attunement/.test(fullText);
+  document.getElementById('mi-mag-tog').className='tog'+(isMagic?' on':'');
+  eMag=isMagic;
+
+  // Description: everything after the cost/weight line
+  const descLines=[];
+  let pastMeta=false;
+  for(const ln of lines){
+    if(!pastMeta && /(\d+\s*(gp|sp|cp|lb))/i.test(ln)){pastMeta=true;continue;}
+    if(pastMeta) descLines.push(ln);
+  }
+  // if no meta line found, use everything from line 3 on
+  if(!descLines.length && lines.length>2) descLines.push(...lines.slice(2));
+  document.getElementById('mi-desc').value = descLines.join('\n');
+
+  // CA hint for clothing/armor with "AC is X + DEX"
+  const acMatch = raw.match(/(?:Armor Class|AC|base AC)\s+(?:is\s+)?(\d+)/i);
+  if(acMatch) document.getElementById('mi-bonus').value='CA base '+acMatch[1];
+
+  showItemPreview(name, mappedType, rarity, weight, cost, isMagic, '', descLines.join(' '));
+  ok.textContent='✓ Campos extraídos de "'+name+'"';
+  ok.style.display='block';
+  toast('Texto extraído: '+name+' ✓');
+}
+
+function showItemPreview(name, type, rarity, weight, cost, magic, source, desc){
+  document.getElementById('ip-name').textContent = name;
+  const typeLabel = TL[type]||type;
+  const rarLabel  = RARITY_PT[rarity]||rarity;
+  document.getElementById('ip-type').textContent = [typeLabel, rarLabel, source].filter(Boolean).join(' · ');
+  const meta=[];
+  if(weight) meta.push(`<span class="ip-badge" style="background:rgba(255,255,255,0.06);color:var(--sub);">⚖️ ${weight}</span>`);
+  if(cost)   meta.push(`<span class="ip-badge" style="background:rgba(239,159,39,0.1);color:#fac775;">💰 ${cost}</span>`);
+  if(magic)  meta.push(`<span class="ip-badge" style="background:rgba(239,159,39,0.15);color:#fac775;">✦ Mágico</span>`);
+  document.getElementById('ip-meta').innerHTML = meta.join('');
+  document.getElementById('ip-desc').textContent = (desc||'').substring(0,200)+(desc&&desc.length>200?'…':'');
+  document.getElementById('mi-preview').classList.add('on');
+}
+// ─── END ITEM IMPORT ──────────────────────────────────────────────────────
+
+// Rarity selector
 let eMag=false;
-function openNew(){eMag=false;['mi-id','mi-name','mi-bonus','mi-desc'].forEach(id=>document.getElementById(id).value='');document.getElementById('mi-type').value='Weapon';document.getElementById('mi-status').value='Backpack';document.getElementById('mi-qty').value='1';document.getElementById('mi-mag-tog').className='tog';document.getElementById('mi-title').textContent='Novo Item';document.getElementById('mi-del').style.display='none';document.getElementById('modal-item').classList.add('open');}
-function openEdit(id){
-  const item=S.items.find(i=>i.id===id);if(!item)return;
-  eMag=item.magic;
-  document.getElementById('mi-id').value=id;document.getElementById('mi-name').value=item.name;document.getElementById('mi-type').value=item.type;document.getElementById('mi-status').value=item.status;document.getElementById('mi-qty').value=item.qty||'1';document.getElementById('mi-bonus').value=item.bonus||'';document.getElementById('mi-desc').value=item.desc||'';document.getElementById('mi-mag-tog').className='tog'+(item.magic?' on':'');document.getElementById('mi-title').textContent=item.name;document.getElementById('mi-del').style.display='block';document.getElementById('modal-item').classList.add('open');
+let curRarity='none';
+function selRarity(el,val){
+  curRarity=val;
+  document.getElementById('mi-rarity').value=val;
+  document.querySelectorAll('.rarity-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  // auto-enable magic for non-none rarities
+  if(val!=='none'&&val!=='common'){eMag=true;document.getElementById('mi-mag-tog').className='tog on';}
+}
+function selRarityById(val){
+  curRarity=val||'none';
+  document.getElementById('mi-rarity').value=curRarity;
+  document.querySelectorAll('.rarity-btn').forEach(b=>{
+    const bval=b.getAttribute('onclick').match(/'([^']+)'/)?.[1]||'none';
+    b.classList.toggle('sel',bval===curRarity);
+  });
 }
 function togMag(){eMag=!eMag;document.getElementById('mi-mag-tog').className='tog'+(eMag?' on':'');}
+
+function openNew(){
+  eMag=false; curRarity='none';
+  ['mi-id','mi-name','mi-bonus','mi-desc','mi-weight','mi-cost'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mi-rarity').value='none';
+  document.getElementById('mi-type').value='Weapon';
+  document.getElementById('mi-status').value='Backpack';
+  document.getElementById('mi-qty').value='1';
+  document.getElementById('mi-mag-tog').className='tog';
+  document.getElementById('mi-title').textContent='Novo Item';
+  document.getElementById('mi-del').style.display='none';
+  // reset JSON panel
+  document.getElementById('mi-json').value='';
+  document.getElementById('mi-text').value='';
+  document.getElementById('mi-json-err').style.display='none';
+  document.getElementById('mi-json-ok').style.display='none';
+  document.getElementById('mi-preview').classList.remove('on');
+  document.getElementById('mi-json-panel').classList.remove('open');
+  const tog=document.getElementById('mi-json-toggle');
+  tog.textContent='📋 Importar do 5etools (JSON ou texto) ▾';
+  selRarityById('none');
+  switchItemImportTab('json');
+  document.getElementById('modal-item').classList.add('open');
+}
+
+function openEdit(id){
+  const item=S.items.find(i=>i.id===id);if(!item)return;
+  eMag=item.magic; curRarity=item.rarity||'none';
+  document.getElementById('mi-id').value=id;
+  document.getElementById('mi-name').value=item.name;
+  document.getElementById('mi-type').value=item.type;
+  document.getElementById('mi-status').value=item.status;
+  document.getElementById('mi-qty').value=item.qty||'1';
+  document.getElementById('mi-bonus').value=item.bonus||'';
+  document.getElementById('mi-weight').value=item.weight||'';
+  document.getElementById('mi-cost').value=item.cost||'';
+  document.getElementById('mi-desc').value=item.desc||'';
+  document.getElementById('mi-rarity').value=curRarity;
+  document.getElementById('mi-mag-tog').className='tog'+(item.magic?' on':'');
+  document.getElementById('mi-title').textContent=item.name;
+  document.getElementById('mi-del').style.display='block';
+  document.getElementById('mi-json').value='';
+  document.getElementById('mi-text').value='';
+  document.getElementById('mi-json-err').style.display='none';
+  document.getElementById('mi-json-ok').style.display='none';
+  document.getElementById('mi-preview').classList.remove('on');
+  document.getElementById('mi-json-panel').classList.remove('open');
+  const tog=document.getElementById('mi-json-toggle');
+  tog.textContent='📋 Importar do 5etools (JSON ou texto) ▾';
+  selRarityById(curRarity);
+  switchItemImportTab('json');
+  document.getElementById('modal-item').classList.add('open');
+}
+
 function saveItem(){
   const id=document.getElementById('mi-id').value;
-  const item={id:id||Date.now().toString(),name:document.getElementById('mi-name').value||'Item',type:document.getElementById('mi-type').value,status:document.getElementById('mi-status').value,qty:document.getElementById('mi-qty').value||'1',bonus:document.getElementById('mi-bonus').value,magic:eMag,desc:document.getElementById('mi-desc').value};
-  if(id){const i=S.items.findIndex(x=>x.id===id);if(i>=0)S.items[i]=item;}else S.items.push(item);
+  const item={
+    id:id||Date.now().toString(),
+    name:document.getElementById('mi-name').value||'Item',
+    type:document.getElementById('mi-type').value,
+    status:document.getElementById('mi-status').value,
+    qty:document.getElementById('mi-qty').value||'1',
+    bonus:document.getElementById('mi-bonus').value,
+    weight:document.getElementById('mi-weight').value,
+    cost:document.getElementById('mi-cost').value,
+    rarity:document.getElementById('mi-rarity').value||'none',
+    magic:eMag,
+    desc:document.getElementById('mi-desc').value
+  };
+  if(id){const i=S.items.findIndex(x=>x.id===id);if(i>=0)S.items[i]=item;}
+  else S.items.push(item);
   sv();cl('modal-item');renderInv();toast('Item salvo ✓');
 }
 function delItem(){const id=document.getElementById('mi-id').value;if(!id||!confirm('Excluir?'))return;S.items=S.items.filter(i=>i.id!==id);sv();cl('modal-item');renderInv();toast('Excluído');}
 function cl(id){document.getElementById(id).classList.remove('open');}
 function clOut(e,id){if(e.target===document.getElementById(id))cl(id);}
+
 // DICE
 const dh=[];
 function roll(s,l){const r=Math.floor(Math.random()*s)+1;show(l,r);}
@@ -1168,31 +1571,20 @@ function show(label,val){
   if(dh.length>10)dh.pop();
   document.getElementById('d-hist').innerHTML=dh.map(h=>`<div class="dh-row"><span>${h.label}</span><span style="color:var(--gold);font-weight:600;">${h.val} <span style="color:var(--muted);font-size:10px;">${h.t}</span></span></div>`).join('');
 }
-// INIT
 
-
-
-// ── CONVOCAR MORTO VIVO ───────────────────────────────────────────────────
+// ── CONVOCAR MORTO VIVO ──────────────────────────────────────────────────
 function uMod(s){return Math.floor((s-10)/2);}
 function uFm(m){return(m>=0?'+':'')+m;}
-
 function renderCMV(){
-  const el=document.getElementById('cmv-list'); if(!el)return;
+  const el=document.getElementById('cmv-list');if(!el)return;
   if(!S.undead||!S.undead.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);text-align:center;padding:12px;">Nenhum servo convocado.</div>';return;}
   el.innerHTML=S.undead.map(u=>{
     const pct=Math.round(u.hpCur/u.hp*100);
     const barColor=pct>50?'linear-gradient(90deg,#8040c0,#c8a8f0)':pct>25?'linear-gradient(90deg,#8a6000,var(--gold))':'linear-gradient(90deg,#8a1010,var(--red))';
-    const traits=(u.traits||'').split('\n').filter(Boolean).map(t=>{
-      const dot=t.indexOf('.');
-      return dot>0?`<div class="undead-trait"><b>${t.substring(0,dot)}.</b>${t.substring(dot+1)}</div>`:`<div class="undead-trait">${t}</div>`;
-    }).join('');
-    const actions=(u.actions||'').split('\n').filter(Boolean).map(a=>{
-      const dot=a.indexOf('.');
-      return dot>0?`<div class="undead-attack"><b>${a.substring(0,dot)}.</b>${a.substring(dot+1)}</div>`:`<div class="undead-attack">${a}</div>`;
-    }).join('');
+    const traits=(u.traits||'').split('\n').filter(Boolean).map(t=>{const dot=t.indexOf('.');return dot>0?`<div class="undead-trait"><b>${t.substring(0,dot)}.</b>${t.substring(dot+1)}</div>`:`<div class="undead-trait">${t}</div>`;}).join('');
+    const actions=(u.actions||'').split('\n').filter(Boolean).map(a=>{const dot=a.indexOf('.');return dot>0?`<div class="undead-attack"><b>${a.substring(0,dot)}.</b>${a.substring(dot+1)}</div>`:`<div class="undead-attack">${a}</div>`;}).join('');
     return `<div class="undead-card" id="uc-${u.id}">
-      <div class="undead-head">
-        <div><div class="undead-name">${u.name}</div><div class="undead-type">${u.type||''}</div></div>
+      <div class="undead-head"><div><div class="undead-name">${u.name}</div><div class="undead-type">${u.type||''}</div></div>
         <button onclick="openEditUndead('${u.id}')" style="background:rgba(255,255,255,0.05);border:.5px solid rgba(255,255,255,0.1);color:var(--muted);font-size:11px;padding:4px 10px;border-radius:20px;cursor:pointer;">Editar</button>
       </div>
       <div class="undead-core">
@@ -1206,604 +1598,110 @@ function renderCMV(){
         </div>
         <div class="uc"><div class="uc-l">Desloc.</div><div class="uc-v" style="font-size:10px;">${u.speed}</div></div>
       </div>
-      <div class="undead-attrs">
-        ${['str','dex','con','int','wis','cha'].map(k=>`<div class="ua"><div class="ua-l">${k.toUpperCase()}</div><div class="ua-s">${u[k]||10}</div><div class="ua-m">${uFm(uMod(u[k]||10))}</div></div>`).join('')}
-      </div>
+      <div class="undead-attrs">${['str','dex','con','int','wis','cha'].map(k=>`<div class="ua"><div class="ua-l">${k.toUpperCase()}</div><div class="ua-s">${u[k]||10}</div><div class="ua-m">${uFm(uMod(u[k]||10))}</div></div>`).join('')}</div>
       ${u.skills?`<div class="undead-section">Perícias & Sentidos</div><div class="undead-trait">${u.skills}</div>`:''}
       ${traits?`<div class="undead-section">Habilidades</div>${traits}`:''}
       ${actions?`<div class="undead-section">Ações</div>${actions}`:''}
     </div>`;
   }).join('');
 }
+function updateUndeadHP(id,val){const u=S.undead.find(x=>x.id===id);if(!u)return;u.hpCur=Math.max(0,Math.min(parseInt(val)||0,u.hp));sv();const pct=Math.round(u.hpCur/u.hp*100);const bar=document.getElementById('uhpbar-'+id);if(bar){bar.style.width=pct+'%';bar.style.background=pct>50?'linear-gradient(90deg,#8040c0,#c8a8f0)':pct>25?'linear-gradient(90deg,#8a6000,var(--gold))':'linear-gradient(90deg,#8a1010,var(--red))';}}
+function toggleCMV(){if(!S.cmvOpen)S.cmvOpen=false;S.cmvOpen=!S.cmvOpen;sv();document.getElementById('cmv-body').classList.toggle('open',S.cmvOpen);document.getElementById('cmv-chevron').classList.toggle('open',S.cmvOpen);}
+function initCMV(){if(!S.cmvOpen)S.cmvOpen=false;document.getElementById('cmv-body').classList.toggle('open',S.cmvOpen);document.getElementById('cmv-chevron').classList.toggle('open',S.cmvOpen);renderCMV();}
+function openNewUndead(){document.getElementById('mu-id').value='';document.getElementById('mu-title').textContent='Novo Morto-Vivo';['mu-name','mu-type','mu-skills','mu-traits','mu-actions'].forEach(id=>document.getElementById(id).value='');['mu-ca','mu-hp','mu-hpcur','mu-str','mu-dex','mu-con','mu-int','mu-wis','mu-cha'].forEach(id=>document.getElementById(id).value='');document.getElementById('mu-del').style.display='none';document.getElementById('mu-json').value='';document.getElementById('mu-json-err').style.display='none';document.getElementById('mu-json-ok').style.display='none';document.getElementById('modal-undead').classList.add('open');}
+function openEditUndead(id){const u=S.undead.find(x=>x.id===id);if(!u)return;document.getElementById('mu-id').value=id;document.getElementById('mu-title').textContent=u.name;document.getElementById('mu-name').value=u.name||'';document.getElementById('mu-type').value=u.type||'';document.getElementById('mu-ca').value=u.ca||'';document.getElementById('mu-hp').value=u.hp||'';document.getElementById('mu-hpcur').value=u.hpCur||u.hp||'';document.getElementById('mu-speed').value=u.speed||'';['str','dex','con','int','wis','cha'].forEach(k=>document.getElementById('mu-'+k).value=u[k]||'');document.getElementById('mu-skills').value=u.skills||'';document.getElementById('mu-traits').value=u.traits||'';document.getElementById('mu-actions').value=u.actions||'';document.getElementById('mu-del').style.display='block';document.getElementById('modal-undead').classList.add('open');}
+function saveUndead(){const id=document.getElementById('mu-id').value;const hp=parseInt(document.getElementById('mu-hp').value)||1;const u={id:id||Date.now().toString(),name:document.getElementById('mu-name').value||'Morto-Vivo',type:document.getElementById('mu-type').value||'',ca:parseInt(document.getElementById('mu-ca').value)||10,hp:hp,hpCur:parseInt(document.getElementById('mu-hpcur').value)||hp,speed:document.getElementById('mu-speed').value||'',str:parseInt(document.getElementById('mu-str').value)||10,dex:parseInt(document.getElementById('mu-dex').value)||10,con:parseInt(document.getElementById('mu-con').value)||10,int:parseInt(document.getElementById('mu-int').value)||10,wis:parseInt(document.getElementById('mu-wis').value)||10,cha:parseInt(document.getElementById('mu-cha').value)||10,skills:document.getElementById('mu-skills').value||'',traits:document.getElementById('mu-traits').value||'',actions:document.getElementById('mu-actions').value||''};if(id){const i=S.undead.findIndex(x=>x.id===id);if(i>=0)S.undead[i]=u;}else S.undead.push(u);sv();cl('modal-undead');renderCMV();toast('Servo salvo ✓');}
+function delUndead(){const id=document.getElementById('mu-id').value;if(!id||!confirm('Remover este servo?'))return;S.undead=S.undead.filter(x=>x.id!==id);sv();cl('modal-undead');renderCMV();toast('Servo removido');}
 
-function updateUndeadHP(id, val){
-  const u=S.undead.find(x=>x.id===id); if(!u)return;
-  u.hpCur=Math.max(0,Math.min(parseInt(val)||0,u.hp));
-  sv();
-  const pct=Math.round(u.hpCur/u.hp*100);
-  const bar=document.getElementById('uhpbar-'+id);
-  if(bar){bar.style.width=pct+'%';bar.style.background=pct>50?'linear-gradient(90deg,#8040c0,#c8a8f0)':pct>25?'linear-gradient(90deg,#8a6000,var(--gold))':'linear-gradient(90deg,#8a1010,var(--red))';}
-}
-
-function toggleCMV(){
-  if(!S.cmvOpen)S.cmvOpen=false;
-  S.cmvOpen=!S.cmvOpen; sv();
-  document.getElementById('cmv-body').classList.toggle('open',S.cmvOpen);
-  document.getElementById('cmv-chevron').classList.toggle('open',S.cmvOpen);
-}
-
-function initCMV(){
-  if(!S.cmvOpen)S.cmvOpen=false;
-  document.getElementById('cmv-body').classList.toggle('open',S.cmvOpen);
-  document.getElementById('cmv-chevron').classList.toggle('open',S.cmvOpen);
-  renderCMV();
-}
-
-function openNewUndead(){
-  document.getElementById('mu-id').value='';
-  document.getElementById('mu-title').textContent='Novo Morto-Vivo';
-  ['mu-name','mu-type','mu-skills','mu-traits','mu-actions'].forEach(id=>document.getElementById(id).value='');
-  ['mu-ca','mu-hp','mu-hpcur','mu-str','mu-dex','mu-con','mu-int','mu-wis','mu-cha'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('mu-del').style.display='none';
-  document.getElementById('mu-json').value='';
-  document.getElementById('mu-json-err').style.display='none';
-  document.getElementById('mu-json-ok').style.display='none';
-  document.getElementById('modal-undead').classList.add('open');
-}
-
-function openEditUndead(id){
-  const u=S.undead.find(x=>x.id===id); if(!u)return;
-  document.getElementById('mu-id').value=id;
-  document.getElementById('mu-title').textContent=u.name;
-  document.getElementById('mu-name').value=u.name||'';
-  document.getElementById('mu-type').value=u.type||'';
-  document.getElementById('mu-ca').value=u.ca||'';
-  document.getElementById('mu-hp').value=u.hp||'';
-  document.getElementById('mu-hpcur').value=u.hpCur||u.hp||'';
-  document.getElementById('mu-speed').value=u.speed||'';
-  ['str','dex','con','int','wis','cha'].forEach(k=>document.getElementById('mu-'+k).value=u[k]||'');
-  document.getElementById('mu-skills').value=u.skills||'';
-  document.getElementById('mu-traits').value=u.traits||'';
-  document.getElementById('mu-actions').value=u.actions||'';
-  document.getElementById('mu-del').style.display='block';
-  document.getElementById('modal-undead').classList.add('open');
-}
-
-function saveUndead(){
-  const id=document.getElementById('mu-id').value;
-  const hp=parseInt(document.getElementById('mu-hp').value)||1;
-  const u={
-    id:id||Date.now().toString(),
-    name:document.getElementById('mu-name').value||'Morto-Vivo',
-    type:document.getElementById('mu-type').value||'',
-    ca:parseInt(document.getElementById('mu-ca').value)||10,
-    hp:hp, hpCur:parseInt(document.getElementById('mu-hpcur').value)||hp,
-    speed:document.getElementById('mu-speed').value||'',
-    str:parseInt(document.getElementById('mu-str').value)||10,
-    dex:parseInt(document.getElementById('mu-dex').value)||10,
-    con:parseInt(document.getElementById('mu-con').value)||10,
-    int:parseInt(document.getElementById('mu-int').value)||10,
-    wis:parseInt(document.getElementById('mu-wis').value)||10,
-    cha:parseInt(document.getElementById('mu-cha').value)||10,
-    skills:document.getElementById('mu-skills').value||'',
-    traits:document.getElementById('mu-traits').value||'',
-    actions:document.getElementById('mu-actions').value||'',
-  };
-  if(id){const i=S.undead.findIndex(x=>x.id===id);if(i>=0)S.undead[i]=u;}
-  else S.undead.push(u);
-  sv(); cl('modal-undead'); renderCMV(); toast('Servo salvo ✓');
-}
-
-function delUndead(){
-  const id=document.getElementById('mu-id').value;
-  if(!id||!confirm('Remover este servo?'))return;
-  S.undead=S.undead.filter(x=>x.id!==id);
-  sv(); cl('modal-undead'); renderCMV(); toast('Servo removido');
-}
-
-// ── NOTAS ─────────────────────────────────────────────────────────────────
-const NOTE_TYPES={
-  npc:{label:'👤 NPC',cls:'nt-npc'},
-  local:{label:'📍 Local',cls:'nt-local'},
-  item:{label:'⚔️ Item',cls:'nt-item'},
-  cenario:{label:'🗺️ Cenário',cls:'nt-cenario'},
-  historia:{label:'📖 História',cls:'nt-historia'},
-  outros:{label:'💬 Outros',cls:'nt-outros'},
-};
-let noteFilter='all';
-let curNoteType='npc';
-
-function setNoteFilter(f,btn){
-  noteFilter=f;
-  document.querySelectorAll('.nfb').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  renderNotes();
-}
-
+// ── NOTAS ────────────────────────────────────────────────────────────────
+const NOTE_TYPES={npc:{label:'👤 NPC',cls:'nt-npc'},local:{label:'📍 Local',cls:'nt-local'},item:{label:'⚔️ Item',cls:'nt-item'},cenario:{label:'🗺️ Cenário',cls:'nt-cenario'},historia:{label:'📖 História',cls:'nt-historia'},outros:{label:'💬 Outros',cls:'nt-outros'}};
+let noteFilter='all',curNoteType='npc';
+function setNoteFilter(f,btn){noteFilter=f;document.querySelectorAll('.nfb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderNotes();}
 function renderNotes(){
   const q=(document.getElementById('notes-search').value||'').toLowerCase();
-  let notes=[...(S.notes||[])].filter(n=>{
-    if(noteFilter!=='all'&&n.type!==noteFilter)return false;
-    if(q&&!(n.name||'').toLowerCase().includes(q)&&!(n.body||'').toLowerCase().includes(q))return false;
-    return true;
-  }).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-
+  let notes=[...(S.notes||[])].filter(n=>{if(noteFilter!=='all'&&n.type!==noteFilter)return false;if(q&&!(n.name||'').toLowerCase().includes(q)&&!(n.body||'').toLowerCase().includes(q))return false;return true;}).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   const el=document.getElementById('notes-list');
   if(!notes.length){el.innerHTML='<div class="notes-empty">Nenhuma anotação encontrada.<br><span style="font-size:11px;">Toque em + para adicionar.</span></div>';return;}
-
-  // group by date
-  const byDate={};
-  notes.forEach(n=>{const d=n.date||'Sem data';if(!byDate[d])byDate[d]=[];byDate[d].push(n);});
-
-  el.innerHTML=Object.entries(byDate).map(([date,items])=>`
-    <div class="session-block">
-      <div class="session-date">${formatDate(date)}</div>
-      ${items.map(n=>{
-        const t=NOTE_TYPES[n.type]||NOTE_TYPES.outros;
-        const linkedNames=(n.links||[]).map(lid=>{
-          const ln=S.notes.find(x=>x.id===lid); if(!ln)return'';
-          const lt=NOTE_TYPES[ln.type]||NOTE_TYPES.outros;
-          return `<span class="nl-chip">${lt.label.split(' ')[0]} ${ln.name}</span>`;
-        }).filter(Boolean).join('');
-        return `<div class="note-card" onclick="openEditNote('${n.id}')">
-          <div class="note-top">
-            <div class="note-title">${n.name||'Sem título'}</div>
-            <span class="note-type-pill ${t.cls}">${t.label}</span>
-          </div>
-          ${n.body?`<div class="note-body">${n.body.substring(0,120)}${n.body.length>120?'…':''}</div>`:''}
-          ${linkedNames?`<div class="note-links-row">${linkedNames}</div>`:''}
-        </div>`;
-      }).join('')}
-    </div>`).join('');
+  const byDate={};notes.forEach(n=>{const d=n.date||'Sem data';if(!byDate[d])byDate[d]=[];byDate[d].push(n);});
+  el.innerHTML=Object.entries(byDate).map(([date,items])=>`<div class="session-block"><div class="session-date">${formatDate(date)}</div>${items.map(n=>{const t=NOTE_TYPES[n.type]||NOTE_TYPES.outros;const linkedNames=(n.links||[]).map(lid=>{const ln=S.notes.find(x=>x.id===lid);if(!ln)return'';const lt=NOTE_TYPES[ln.type]||NOTE_TYPES.outros;return`<span class="nl-chip">${lt.label.split(' ')[0]} ${ln.name}</span>`;}).filter(Boolean).join('');return`<div class="note-card" onclick="openEditNote('${n.id}')"><div class="note-top"><div class="note-title">${n.name||'Sem título'}</div><span class="note-type-pill ${t.cls}">${t.label}</span></div>${n.body?`<div class="note-body">${n.body.substring(0,120)}${n.body.length>120?'…':''}</div>`:''}${linkedNames?`<div class="note-links-row">${linkedNames}</div>`:''}</div>`;}).join('')}</div>`).join('');
 }
+function formatDate(d){if(!d||d==='Sem data')return 'Sem data';try{const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}catch(e){return d;}}
+function selNoteType(el,type){curNoteType=type;document.querySelectorAll('#mn-types .nmt').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
+function openNewNote(){curNoteType='npc';document.getElementById('mn-id').value='';document.getElementById('mn-title').textContent='Nova Anotação';document.getElementById('mn-name').value='';document.getElementById('mn-body').value='';document.getElementById('mn-date').value=new Date().toISOString().split('T')[0];document.querySelectorAll('#mn-types .nmt').forEach(b=>b.classList.remove('sel'));document.querySelector('#mn-types .nmt').classList.add('sel');document.getElementById('mn-del').style.display='none';document.getElementById('mn-json').value='';document.getElementById('mn-json-err').style.display='none';document.getElementById('mn-json-ok').style.display='none';initNoteLinks([]);document.getElementById('modal-note').classList.add('open');}
+function openEditNote(id){const n=S.notes.find(x=>x.id===id);if(!n)return;curNoteType=n.type||'npc';document.getElementById('mn-id').value=id;document.getElementById('mn-title').textContent=n.name||'Anotação';document.getElementById('mn-name').value=n.name||'';document.getElementById('mn-body').value=n.body||'';document.getElementById('mn-date').value=n.date||'';document.querySelectorAll('#mn-types .nmt').forEach(b=>{const t=b.getAttribute('onclick').match(/'([^']+)'/)?.[1];b.classList.toggle('sel',t===curNoteType);});document.getElementById('mn-del').style.display='block';document.getElementById('mn-json').value='';document.getElementById('mn-json-err').style.display='none';document.getElementById('mn-json-ok').style.display='none';initNoteLinks(n.links||[]);document.getElementById('modal-note').classList.add('open');}
+function saveNote(){const id=document.getElementById('mn-id').value;const existing=id?S.notes.find(x=>x.id===id):null;const oldLinks=existing?existing.links||[]:[];const n={id:id||Date.now().toString(),name:document.getElementById('mn-name').value||'Sem título',type:curNoteType,date:document.getElementById('mn-date').value||new Date().toISOString().split('T')[0],body:document.getElementById('mn-body').value||'',links:[...curNoteLinks]};if(id){const i=S.notes.findIndex(x=>x.id===id);if(i>=0)S.notes[i]=n;}else S.notes.push(n);applyBidirectionalLinks(n.id,n.links,oldLinks);sv();cl('modal-note');renderNotes();toast('Anotação salva ✓');}
+function delNote(){const id=document.getElementById('mn-id').value;if(!id||!confirm('Excluir anotação?'))return;S.notes=S.notes.filter(x=>x.id!==id);sv();cl('modal-note');renderNotes();toast('Anotação excluída');}
 
-function formatDate(d){
-  if(!d||d==='Sem data')return 'Sem data';
-  try{const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}catch(e){return d;}
-}
+// JSON utilities (shared)
+function toggleJsonPanel(panelId,btn){const p=document.getElementById(panelId);p.classList.toggle('open');btn.textContent=p.classList.contains('open')?btn.textContent.replace('▾','▴'):btn.textContent.replace('▴','▾');}
+function parseEntries(entries){if(!entries||!entries.length)return '';return entries.map(e=>{if(typeof e==='string'){return e.replace(/\{@atk mw,rw\}/g,'Corpo a corpo ou Distância:').replace(/\{@atk mw\}/g,'Corpo a corpo:').replace(/\{@atk rw\}/g,'Distância:').replace(/\{@hit (\d+)\}/g,'$1 para acertar').replace(/\{@h\}/g,'Acerto: ').replace(/\{@damage ([^}]+)\}/g,'$1').replace(/\{@dc (\d+)\}/g,'CD $1').replace(/\{@creature ([^}|]+)[^}]*\}/g,'$1').replace(/\{@status ([^}|]+)[^}]*\}/g,'$1').replace(/\{@condition ([^}|]+)[^}]*\}/g,'$1').replace(/\{@spell ([^}|]+)[^}]*\}/g,'$1').replace(/\{@item ([^}|]+)[^}]*\}/g,'$1').replace(/\{@recharge (\d+)(?:-(\d+))?\}/g,'(Recarga $1–$2)').replace(/\{@recharge\}/g,'(Recarga)').replace(/\{@[a-z]+ ([^}|]+)[^}]*\}/g,'$1');}if(typeof e==='object'&&e.entries)return e.name+': '+parseEntries(e.entries);return '';}).filter(Boolean).join(' ');}
+function sizeLabel(s){const m={T:'Tiny',S:'Small',M:'Medium',L:'Large',H:'Huge',G:'Gargantuan'};return(Array.isArray(s)?s.map(x=>m[x]||x):m[s]||s||'').toString();}
+function speedStr(sp){if(!sp)return '';return Object.entries(sp).map(([k,v])=>`${v}ft ${k}`).join(', ');}
+function alignStr(al){if(!al||!al.length)return '';const m={L:'Legal',N:'Neutro',C:'Caótico',G:'Bom',E:'Mau'};return al.map(x=>m[x]||x).join(' ');}
+function parse5eJSON(raw){let data;try{data=JSON.parse(raw);}catch(e){return null;}if(Array.isArray(data))data=data[0];if(data.monster)data=data.monster[0];return data;}
 
-function selNoteType(el,type){
-  curNoteType=type;
-  document.querySelectorAll('#mn-types .nmt').forEach(b=>b.classList.remove('sel'));
-  el.classList.add('sel');
-}
-
-function openNewNote(){
-  curNoteType='npc';
-  document.getElementById('mn-id').value='';
-  document.getElementById('mn-title').textContent='Nova Anotação';
-  document.getElementById('mn-name').value='';
-  document.getElementById('mn-body').value='';
-  document.getElementById('mn-date').value=new Date().toISOString().split('T')[0];
-  document.querySelectorAll('#mn-types .nmt').forEach(b=>b.classList.remove('sel'));
-  document.querySelector('#mn-types .nmt').classList.add('sel');
-  document.getElementById('mn-del').style.display='none';
-  document.getElementById('mn-json').value='';
-  document.getElementById('mn-json-err').style.display='none';
-  document.getElementById('mn-json-ok').style.display='none';
-  initNoteLinks([]);
-  document.getElementById('modal-note').classList.add('open');
-}
-
-function openEditNote(id){
-  const n=S.notes.find(x=>x.id===id); if(!n)return;
-  curNoteType=n.type||'npc';
-  document.getElementById('mn-id').value=id;
-  document.getElementById('mn-title').textContent=n.name||'Anotação';
-  document.getElementById('mn-name').value=n.name||'';
-  document.getElementById('mn-body').value=n.body||'';
-  document.getElementById('mn-date').value=n.date||'';
-  document.querySelectorAll('#mn-types .nmt').forEach(b=>{
-    const t=b.getAttribute('onclick').match(/'([^']+)'/)?.[1];
-    b.classList.toggle('sel',t===curNoteType);
-  });
-  document.getElementById('mn-del').style.display='block';
-  document.getElementById('mn-json').value='';
-  document.getElementById('mn-json-err').style.display='none';
-  document.getElementById('mn-json-ok').style.display='none';
-  initNoteLinks(n.links||[]);
-  document.getElementById('modal-note').classList.add('open');
-}
-
-function saveNote(){
-  const id=document.getElementById('mn-id').value;
-  const existing=id?S.notes.find(x=>x.id===id):null;
-  const oldLinks=existing?existing.links||[]:[];
-  const n={
-    id:id||Date.now().toString(),
-    name:document.getElementById('mn-name').value||'Sem título',
-    type:curNoteType,
-    date:document.getElementById('mn-date').value||new Date().toISOString().split('T')[0],
-    body:document.getElementById('mn-body').value||'',
-    links:[...curNoteLinks]
-  };
-  if(id){const i=S.notes.findIndex(x=>x.id===id);if(i>=0)S.notes[i]=n;}
-  else S.notes.push(n);
-  applyBidirectionalLinks(n.id, n.links, oldLinks);
-  sv(); cl('modal-note'); renderNotes(); toast('Anotação salva ✓');
-}
-
-function delNote(){
-  const id=document.getElementById('mn-id').value;
-  if(!id||!confirm('Excluir anotação?'))return;
-  S.notes=S.notes.filter(x=>x.id!==id);
-  sv(); cl('modal-note'); renderNotes(); toast('Anotação excluída');
-}
-
-
-// ── JSON PARSER UTILITIES ─────────────────────────────────────────────────
-function toggleJsonPanel(panelId, btn){
-  const p = document.getElementById(panelId);
-  p.classList.toggle('open');
-  btn.textContent = p.classList.contains('open')
-    ? btn.textContent.replace('▾','▴')
-    : btn.textContent.replace('▴','▾');
-}
-
-function parseEntries(entries){
-  // Resolve 5etools tags: {@atk mw} {@hit 4} {@damage 1d6} {@h} {@creature X} {@status X}
-  if(!entries || !entries.length) return '';
-  return entries.map(e => {
-    if(typeof e === 'string'){
-      return e
-        .replace(/\{@atk mw,rw\}/g,'Corpo a corpo ou Distância:')
-        .replace(/\{@atk mw\}/g,'Corpo a corpo:')
-        .replace(/\{@atk rw\}/g,'Distância:')
-        .replace(/\{@hit (\d+)\}/g,'$1 para acertar')
-        .replace(/\{@h\}/g,'Acerto: ')
-        .replace(/\{@damage ([^}]+)\}/g,'$1')
-        .replace(/\{@dc (\d+)\}/g,'CD $1')
-        .replace(/\{@creature ([^}|]+)[^}]*\}/g,'$1')
-        .replace(/\{@status ([^}|]+)[^}]*\}/g,'$1')
-        .replace(/\{@condition ([^}|]+)[^}]*\}/g,'$1')
-        .replace(/\{@spell ([^}|]+)[^}]*\}/g,'$1')
-        .replace(/\{@item ([^}|]+)[^}]*\}/g,'$1')
-        .replace(/\{@recharge (\d+)(?:-(\d+))?\}/g,'(Recarga $1–$2)')
-        .replace(/\{@recharge\}/g,'(Recarga)')
-        .replace(/\{@[a-z]+ ([^}|]+)[^}]*\}/g,'$1');
-    }
-    if(typeof e === 'object' && e.entries) return e.name + ': ' + parseEntries(e.entries);
-    return '';
-  }).filter(Boolean).join(' ');
-}
-
-function sizeLabel(s){
-  const m={T:'Tiny',S:'Small',M:'Medium',L:'Large',H:'Huge',G:'Gargantuan'};
-  return (Array.isArray(s)?s.map(x=>m[x]||x):m[s]||s||'').toString();
-}
-
-function speedStr(sp){
-  if(!sp) return '';
-  return Object.entries(sp).map(([k,v])=>`${v}ft ${k}`).join(', ');
-}
-
-function alignStr(al){
-  if(!al||!al.length) return '';
-  const m={L:'Legal',N:'Neutro',C:'Caótico',G:'Bom',E:'Mau'};
-  return al.map(x=>m[x]||x).join(' ');
-}
-
-function parse5eJSON(raw){
-  let data;
-  try { data = JSON.parse(raw); } catch(e){ return null; }
-  // Support both single object and {monster:[...]} array format
-  if(Array.isArray(data)) data = data[0];
-  if(data.monster) data = data.monster[0];
-  return data;
-}
-
-// Parse for undead/monster card
 function parseUndeadJSON(){
-  const raw = document.getElementById('mu-json').value.trim();
-  const err = document.getElementById('mu-json-err');
-  const ok  = document.getElementById('mu-json-ok');
-  err.style.display='none'; ok.style.display='none';
-
-  const d = parse5eJSON(raw);
-  if(!d){ err.style.display='block'; return; }
-
-  // Name
-  document.getElementById('mu-name').value = d.name || '';
-
-  // Type string
-  const typeStr = d.type
-    ? (typeof d.type === 'string' ? d.type : `${sizeLabel(d.size)} ${d.type.type||d.type}${d.type.tags?' ('+d.type.tags.join(', ')+')':''}`)
-    : sizeLabel(d.size)||'';
-  document.getElementById('mu-type').value = typeStr + (d.alignment ? ', '+alignStr(d.alignment) : '');
-
-  // AC
-  const ac = Array.isArray(d.ac) ? (typeof d.ac[0]==='number'?d.ac[0]:d.ac[0].ac||d.ac[0]) : d.ac||'';
-  document.getElementById('mu-ca').value = ac;
-
-  // HP
-  const hp = d.hp ? (d.hp.average || d.hp) : '';
-  document.getElementById('mu-hp').value = hp;
-  document.getElementById('mu-hpcur').value = hp;
-
-  // Speed
-  document.getElementById('mu-speed').value = speedStr(d.speed);
-
-  // Attributes
-  ['str','dex','con','int','wis','cha'].forEach(k=>{
-    if(d[k]!==undefined) document.getElementById('mu-'+k).value = d[k];
-  });
-
-  // Skills + senses
-  const skillParts = [];
-  if(d.skill) Object.entries(d.skill).forEach(([k,v])=>skillParts.push(k+' '+v));
-  if(d.passive) skillParts.push('Percepção Passiva '+d.passive);
-  if(d.senses) skillParts.push(...(Array.isArray(d.senses)?d.senses:[d.senses]));
-  if(d.languages) skillParts.push('Idiomas: '+(Array.isArray(d.languages)?d.languages.join(', '):d.languages));
-  if(d.cr) skillParts.push('ND '+d.cr);
-  document.getElementById('mu-skills').value = skillParts.join(' · ');
-
-  // Traits / features
-  const traitParts = [];
-  if(d.trait) d.trait.forEach(t=>traitParts.push(t.name+'.\n'+parseEntries(t.entries)));
-  if(d.reaction) d.reaction.forEach(r=>traitParts.push('[Reação] '+r.name+'.\n'+parseEntries(r.entries)));
-  if(d.legendary) d.legendary.forEach(l=>traitParts.push('[Lendário] '+l.name+'.\n'+parseEntries(l.entries)));
-  document.getElementById('mu-traits').value = traitParts.join('\n\n');
-
-  // Actions
-  const actionParts = [];
-  if(d.action) d.action.forEach(a=>actionParts.push(a.name+'.\n'+parseEntries(a.entries)));
-  if(d.bonus) d.bonus.forEach(b=>actionParts.push('[Bônus] '+b.name+'.\n'+parseEntries(b.entries)));
-  document.getElementById('mu-actions').value = actionParts.join('\n\n');
-
-  ok.style.display='block';
-  ok.textContent = '✓ Preenchido: '+d.name+(d.source ? ' ('+d.source+')' : '');
+  const raw=document.getElementById('mu-json').value.trim();
+  const err=document.getElementById('mu-json-err');const ok=document.getElementById('mu-json-ok');
+  err.style.display='none';ok.style.display='none';
+  const d=parse5eJSON(raw);if(!d){err.style.display='block';return;}
+  document.getElementById('mu-name').value=d.name||'';
+  const typeStr=d.type?(typeof d.type==='string'?d.type:`${sizeLabel(d.size)} ${d.type.type||d.type}${d.type.tags?' ('+d.type.tags.join(', ')+')':''}`):(sizeLabel(d.size)||'');
+  document.getElementById('mu-type').value=typeStr+(d.alignment?', '+alignStr(d.alignment):'');
+  const ac=Array.isArray(d.ac)?(typeof d.ac[0]==='number'?d.ac[0]:d.ac[0].ac||d.ac[0]):d.ac||'';
+  document.getElementById('mu-ca').value=ac;
+  const hp=d.hp?(d.hp.average||d.hp):'';
+  document.getElementById('mu-hp').value=hp;document.getElementById('mu-hpcur').value=hp;
+  document.getElementById('mu-speed').value=speedStr(d.speed);
+  ['str','dex','con','int','wis','cha'].forEach(k=>{if(d[k]!==undefined)document.getElementById('mu-'+k).value=d[k];});
+  const skillParts=[];if(d.skill)Object.entries(d.skill).forEach(([k,v])=>skillParts.push(k+' '+v));if(d.passive)skillParts.push('Percepção Passiva '+d.passive);if(d.senses)skillParts.push(...(Array.isArray(d.senses)?d.senses:[d.senses]));if(d.languages)skillParts.push('Idiomas: '+(Array.isArray(d.languages)?d.languages.join(', '):d.languages));if(d.cr)skillParts.push('ND '+d.cr);
+  document.getElementById('mu-skills').value=skillParts.join(' · ');
+  const traitParts=[];if(d.trait)d.trait.forEach(t=>traitParts.push(t.name+'.\n'+parseEntries(t.entries)));if(d.reaction)d.reaction.forEach(r=>traitParts.push('[Reação] '+r.name+'.\n'+parseEntries(r.entries)));if(d.legendary)d.legendary.forEach(l=>traitParts.push('[Lendário] '+l.name+'.\n'+parseEntries(l.entries)));
+  document.getElementById('mu-traits').value=traitParts.join('\n\n');
+  const actionParts=[];if(d.action)d.action.forEach(a=>actionParts.push(a.name+'.\n'+parseEntries(a.entries)));if(d.bonus)d.bonus.forEach(b=>actionParts.push('[Bônus] '+b.name+'.\n'+parseEntries(b.entries)));
+  document.getElementById('mu-actions').value=actionParts.join('\n\n');
+  ok.style.display='block';ok.textContent='✓ Preenchido: '+d.name+(d.source?' ('+d.source+')':'');
 }
-
-// Parse for NPC note
 function parseNoteJSON(){
-  const raw = document.getElementById('mn-json').value.trim();
-  const err = document.getElementById('mn-json-err');
-  const ok  = document.getElementById('mn-json-ok');
-  err.style.display='none'; ok.style.display='none';
-
-  const d = parse5eJSON(raw);
-  if(!d){ err.style.display='block'; return; }
-
-  document.getElementById('mn-name').value = d.name || '';
-
-  // Build description text
-  const lines = [];
-  if(d.type || d.size) lines.push(`Tipo: ${sizeLabel(d.size)} ${typeof d.type==='string'?d.type:d.type?.type||''}, ${alignStr(d.alignment||[])}`);
-  if(d.ac) lines.push(`CA: ${Array.isArray(d.ac)?d.ac[0]:d.ac}`);
-  if(d.hp) lines.push(`HP: ${d.hp.average||d.hp} (${d.hp.formula||''})`);
-  if(d.speed) lines.push(`Velocidade: ${speedStr(d.speed)}`);
-  if(d.cr) lines.push(`ND: ${d.cr}`);
-  const attrs = ['str','dex','con','int','wis','cha'].map(k=>k.toUpperCase()+' '+(d[k]||10)).join(' | ');
-  lines.push(attrs);
-  if(d.skill) lines.push('Perícias: '+Object.entries(d.skill).map(([k,v])=>k+' '+v).join(', '));
-  if(d.senses) lines.push('Sentidos: '+(Array.isArray(d.senses)?d.senses.join(', '):d.senses));
-  if(d.languages) lines.push('Idiomas: '+(Array.isArray(d.languages)?d.languages.join(', '):d.languages));
-  if(d.trait) { lines.push(''); d.trait.forEach(t=>lines.push(t.name+'. '+parseEntries(t.entries))); }
-  if(d.action) { lines.push(''); lines.push('AÇÕES:'); d.action.forEach(a=>lines.push(a.name+'. '+parseEntries(a.entries))); }
-
-  document.getElementById('mn-body').value = lines.join('\n');
-  // Auto-set type to NPC
-  curNoteType = 'npc';
-  document.querySelectorAll('#mn-types .nmt').forEach(b=>{
-    const t=b.getAttribute('onclick').match(/'([^']+)'/)?.[1];
-    b.classList.toggle('sel', t==='npc');
-  });
+  const raw=document.getElementById('mn-json').value.trim();
+  const err=document.getElementById('mn-json-err');const ok=document.getElementById('mn-json-ok');
+  err.style.display='none';ok.style.display='none';
+  const d=parse5eJSON(raw);if(!d){err.style.display='block';return;}
+  document.getElementById('mn-name').value=d.name||'';
+  const lines=[];if(d.type||d.size)lines.push(`Tipo: ${sizeLabel(d.size)} ${typeof d.type==='string'?d.type:d.type?.type||''}, ${alignStr(d.alignment||[])}`);if(d.ac)lines.push(`CA: ${Array.isArray(d.ac)?d.ac[0]:d.ac}`);if(d.hp)lines.push(`HP: ${d.hp.average||d.hp} (${d.hp.formula||''})`);if(d.speed)lines.push(`Velocidade: ${speedStr(d.speed)}`);if(d.cr)lines.push(`ND: ${d.cr}`);const attrs=['str','dex','con','int','wis','cha'].map(k=>k.toUpperCase()+' '+(d[k]||10)).join(' | ');lines.push(attrs);if(d.skill)lines.push('Perícias: '+Object.entries(d.skill).map(([k,v])=>k+' '+v).join(', '));if(d.senses)lines.push('Sentidos: '+(Array.isArray(d.senses)?d.senses.join(', '):d.senses));if(d.languages)lines.push('Idiomas: '+(Array.isArray(d.languages)?d.languages.join(', '):d.languages));if(d.trait){lines.push('');d.trait.forEach(t=>lines.push(t.name+'. '+parseEntries(t.entries)));}if(d.action){lines.push('');lines.push('AÇÕES:');d.action.forEach(a=>lines.push(a.name+'. '+parseEntries(a.entries)));}
+  document.getElementById('mn-body').value=lines.join('\n');
+  curNoteType='npc';document.querySelectorAll('#mn-types .nmt').forEach(b=>{const t=b.getAttribute('onclick').match(/'([^']+)'/)?.[1];b.classList.toggle('sel',t==='npc');});
   ok.style.display='block';
 }
 
-// ── BIDIRECTIONAL NOTE LINKS ──────────────────────────────────────────────
-let curNoteLinks = []; // array of note ids currently being edited
-
-function initNoteLinks(existingLinks){
-  curNoteLinks = existingLinks ? [...existingLinks] : [];
-  renderLinkChips();
-  document.getElementById('mn-link-picker').classList.remove('open');
-}
-
-function renderLinkChips(){
-  const el = document.getElementById('mn-link-chips'); if(!el) return;
-  if(!curNoteLinks.length){ el.innerHTML='<span style="font-size:11px;color:var(--muted);">Nenhum vínculo ainda.</span>'; return; }
-  el.innerHTML = curNoteLinks.map(lid=>{
-    const n = S.notes.find(x=>x.id===lid);
-    if(!n) return '';
-    const t = NOTE_TYPES[n.type]||NOTE_TYPES.outros;
-    return `<span class="link-chip linked">
-      <span class="note-type-pill ${t.cls}" style="padding:0 5px;">${t.label.split(' ')[0]}</span>
-      ${n.name}
-      <span class="lx" onclick="removeLink('${lid}')">×</span>
-    </span>`;
-  }).filter(Boolean).join('');
-}
-
-function removeLink(lid){
-  curNoteLinks = curNoteLinks.filter(x=>x!==lid);
-  renderLinkChips();
-}
-
-function toggleLinkPicker(){
-  const p = document.getElementById('mn-link-picker');
-  p.classList.toggle('open');
-  if(p.classList.contains('open')){ renderLinkPicker(); document.getElementById('lp-search').focus(); }
-}
-
-function renderLinkPicker(){
-  const q = (document.getElementById('lp-search').value||'').toLowerCase();
-  const editId = document.getElementById('mn-id').value;
-  const candidates = (S.notes||[]).filter(n=>
-    n.id !== editId &&
-    !curNoteLinks.includes(n.id) &&
-    (n.name||'').toLowerCase().includes(q)
-  );
-  const el = document.getElementById('lp-items');
-  if(!candidates.length){ el.innerHTML='<div class="lp-item" style="color:var(--muted);">Nenhuma anotação encontrada</div>'; return; }
-  el.innerHTML = candidates.map(n=>{
-    const t = NOTE_TYPES[n.type]||NOTE_TYPES.outros;
-    return `<div class="lp-item" onclick="addLink('${n.id}')">
-      <span class="note-type-pill ${t.cls}" style="padding:1px 6px;font-size:9px;">${t.label.split(' ')[0]}</span>
-      <span>${n.name}</span>
-    </div>`;
-  }).join('');
-}
-
-function addLink(lid){
-  if(!curNoteLinks.includes(lid)) curNoteLinks.push(lid);
-  renderLinkChips();
-  renderLinkPicker();
-  document.getElementById('mn-link-picker').classList.remove('open');
-}
-
-// Apply bidirectional links when saving a note
-function applyBidirectionalLinks(noteId, newLinks, oldLinks){
-  const removed = (oldLinks||[]).filter(id=>!newLinks.includes(id));
-  const added   = newLinks.filter(id=>!(oldLinks||[]).includes(id));
-  // Remove this note from notes that were unlinked
-  removed.forEach(lid=>{
-    const n = S.notes.find(x=>x.id===lid); if(!n) return;
-    n.links = (n.links||[]).filter(x=>x!==noteId);
-  });
-  // Add this note to newly linked notes
-  added.forEach(lid=>{
-    const n = S.notes.find(x=>x.id===lid); if(!n) return;
-    if(!n.links) n.links=[];
-    if(!n.links.includes(noteId)) n.links.push(noteId);
-  });
-}
+// Note links
+let curNoteLinks=[];
+function initNoteLinks(existingLinks){curNoteLinks=existingLinks?[...existingLinks]:[];renderLinkChips();document.getElementById('mn-link-picker').classList.remove('open');}
+function renderLinkChips(){const el=document.getElementById('mn-link-chips');if(!el)return;if(!curNoteLinks.length){el.innerHTML='<span style="font-size:11px;color:var(--muted);">Nenhum vínculo ainda.</span>';return;}el.innerHTML=curNoteLinks.map(lid=>{const n=S.notes.find(x=>x.id===lid);if(!n)return'';const t=NOTE_TYPES[n.type]||NOTE_TYPES.outros;return`<span class="link-chip linked"><span class="note-type-pill ${t.cls}" style="padding:0 5px;">${t.label.split(' ')[0]}</span>${n.name}<span class="lx" onclick="removeLink('${lid}')">×</span></span>`;}).filter(Boolean).join('');}
+function removeLink(lid){curNoteLinks=curNoteLinks.filter(x=>x!==lid);renderLinkChips();}
+function toggleLinkPicker(){const p=document.getElementById('mn-link-picker');p.classList.toggle('open');if(p.classList.contains('open')){renderLinkPicker();document.getElementById('lp-search').focus();}}
+function renderLinkPicker(){const q=(document.getElementById('lp-search').value||'').toLowerCase();const editId=document.getElementById('mn-id').value;const candidates=(S.notes||[]).filter(n=>n.id!==editId&&!curNoteLinks.includes(n.id)&&(n.name||'').toLowerCase().includes(q));const el=document.getElementById('lp-items');if(!candidates.length){el.innerHTML='<div class="lp-item" style="color:var(--muted);">Nenhuma anotação encontrada</div>';return;}el.innerHTML=candidates.map(n=>{const t=NOTE_TYPES[n.type]||NOTE_TYPES.outros;return`<div class="lp-item" onclick="addLink('${n.id}')"><span class="note-type-pill ${t.cls}" style="padding:1px 6px;font-size:9px;">${t.label.split(' ')[0]}</span><span>${n.name}</span></div>`;}).join('');}
+function addLink(lid){if(!curNoteLinks.includes(lid))curNoteLinks.push(lid);renderLinkChips();renderLinkPicker();document.getElementById('mn-link-picker').classList.remove('open');}
+function applyBidirectionalLinks(noteId,newLinks,oldLinks){const removed=(oldLinks||[]).filter(id=>!newLinks.includes(id));const added=newLinks.filter(id=>!(oldLinks||[]).includes(id));removed.forEach(lid=>{const n=S.notes.find(x=>x.id===lid);if(!n)return;n.links=(n.links||[]).filter(x=>x!==noteId);});added.forEach(lid=>{const n=S.notes.find(x=>x.id===lid);if(!n)return;if(!n.links)n.links=[];if(!n.links.includes(noteId))n.links.push(noteId);});}
 
 // QUIMERA VENENOSA
-const QV_TYPES = {
-  perf:    {label:'⚔️ Perfurante',   bg:'rgba(180,100,100,0.2)', border:'rgba(180,100,100,0.5)', color:'#e0a0a0', magic:false},
-  magico:  {label:'✦ Mágico Perf.',  bg:'rgba(127,119,221,0.2)', border:'rgba(127,119,221,0.5)', color:'#c4c0f0', magic:true},
-  veneno:  {label:'☠️ Veneno',        bg:'rgba(100,180,80,0.2)',  border:'rgba(100,180,80,0.5)',  color:'#90d070', magic:false},
-  fogo:    {label:'🔥 Fogo',          bg:'rgba(220,120,40,0.2)',  border:'rgba(220,120,40,0.5)',  color:'#f09050', magic:false},
-  gelo:    {label:'❄️ Gelo',          bg:'rgba(100,180,220,0.2)', border:'rgba(100,180,220,0.5)', color:'#80c8e8', magic:false},
-  radiante:{label:'☀️ Radiante',      bg:'rgba(240,220,80,0.2)',  border:'rgba(240,220,80,0.5)',  color:'#e8d060', magic:false},
-  eletrico:{label:'⚡ Elétrico',       bg:'rgba(180,140,240,0.2)', border:'rgba(180,140,240,0.5)', color:'#c8a8f0', magic:false},
-  acido:   {label:'🧪 Ácido',         bg:'rgba(140,200,60,0.2)',  border:'rgba(140,200,60,0.5)',  color:'#a0d840', magic:false},
-};
-const QV_MAX = 4; // proficiency bonus
-
-function initQV(){
-  if(!S.qv) S.qv = {open:false, charges:QV_MAX, usedCharges:0, dmgType:'perf', magicActive:false};
-  renderQVPips();
-  updateQVDisplay();
-  if(S.qv.open){ document.getElementById('qv-body').classList.add('open'); document.getElementById('qv-chevron').classList.add('open'); }
-}
-
-function toggleQV(){
-  S.qv.open = !S.qv.open;
-  document.getElementById('qv-body').classList.toggle('open', S.qv.open);
-  document.getElementById('qv-chevron').classList.toggle('open', S.qv.open);
-  sv();
-}
-
-function renderQVPips(){
-  const max = QV_MAX;
-  const used = S.qv.usedCharges||0;
-  document.getElementById('qv-pips').innerHTML = Array.from({length:max},(_,i)=>{
-    const isUsed = i < used;
-    const cls = isUsed ? 'used' : '';
-    return `<div class="qv-pip ${cls}" onclick="toggleQVPip(${i})">${i+1}</div>`;
-  }).join('');
-  document.getElementById('qv-charges-left').textContent = max - used;
-  document.getElementById('qv-charges-max').textContent = max;
-  document.getElementById('qv-charge-stat').textContent = (max-used)+'/'+max;
-}
-
-function toggleQVPip(idx){
-  const used = S.qv.usedCharges||0;
-  S.qv.usedCharges = idx < used ? idx : Math.min(idx+1, QV_MAX);
-  // if all charges consumed, deactivate magic mode
-  if(S.qv.usedCharges >= QV_MAX) S.qv.magicActive = false;
-  sv(); renderQVPips(); updateQVDisplay();
-  toast('Cargas Quimera: '+(QV_MAX-S.qv.usedCharges)+'/'+QV_MAX);
-}
-
-function resetQVCharges(){
-  S.qv.usedCharges = 0; S.qv.magicActive = false;
-  sv(); renderQVPips(); updateQVDisplay(); toast('Quimera: cargas restauradas ao amanhecer ✓');
-}
-
-function selDmg(el, type, label){
-  // only allow non-base types if magic mode active or if selecting base perfurante
-  if(type !== 'perf' && !S.qv.magicActive){
-    // activate magic mode using a charge
-    if(S.qv.usedCharges >= QV_MAX){ toast('Sem cargas disponíveis!'); return; }
-    S.qv.usedCharges++;
-    S.qv.magicActive = true;
-  }
-  if(type === 'perf' && S.qv.magicActive){
-    S.qv.magicActive = false;
-  }
-  S.qv.dmgType = type;
-  sv(); renderQVPips(); updateQVDisplay();
-  // update visual selection
-  document.querySelectorAll('#qv-dmg-types .dt').forEach(d=>d.classList.remove('sel'));
-  el.classList.add('sel');
-}
-
-function updateQVDisplay(){
-  const t = QV_TYPES[S.qv.dmgType||'perf'];
-  const isMagic = S.qv.magicActive;
-  // header badge
-  document.getElementById('qv-type-badge').textContent = t.label;
-  const magicBadge = document.getElementById('qv-magic-badge');
-  magicBadge.style.display = isMagic ? 'inline-flex' : 'none';
-  // card border color
-  const card = document.getElementById('qv-card');
-  card.style.borderColor = isMagic ? 'rgba(127,119,221,0.5)' : 'rgba(226,75,74,0.35)';
-  card.style.background = isMagic ? 'rgba(127,119,221,0.04)' : 'rgba(226,75,74,0.06)';
-  // active banner
-  const banner = document.getElementById('qv-active-banner');
-  banner.style.display = isMagic ? 'block' : 'none';
-  document.getElementById('qv-active-type').textContent = t.label;
-  // damage display
-  const dmgLabel = isMagic ? '1d10+1 Mágico' : '1d10+1';
-  document.getElementById('qv-dmg-stat').textContent = dmgLabel;
-  document.getElementById('qv-dmg-full').textContent = dmgLabel;
-  const pill = document.getElementById('qv-dmg-pill');
-  pill.textContent = t.label;
-  pill.style.background = t.bg;
-  pill.style.borderColor = t.border;
-  pill.style.color = t.color;
-  pill.style.border = '.5px solid '+t.border;
-  // sync selected pill in dmg-types
-  document.querySelectorAll('#qv-dmg-types .dt').forEach(d=>{
-    const dtype = d.getAttribute('onclick').match(/'([^']+)'/)?.[1];
-    d.classList.toggle('sel', dtype === S.qv.dmgType);
-  });
-}
+const QV_TYPES={perf:{label:'⚔️ Perfurante',bg:'rgba(180,100,100,0.2)',border:'rgba(180,100,100,0.5)',color:'#e0a0a0',magic:false},magico:{label:'✦ Mágico Perf.',bg:'rgba(127,119,221,0.2)',border:'rgba(127,119,221,0.5)',color:'#c4c0f0',magic:true},veneno:{label:'☠️ Veneno',bg:'rgba(100,180,80,0.2)',border:'rgba(100,180,80,0.5)',color:'#90d070',magic:false},fogo:{label:'🔥 Fogo',bg:'rgba(220,120,40,0.2)',border:'rgba(220,120,40,0.5)',color:'#f09050',magic:false},gelo:{label:'❄️ Gelo',bg:'rgba(100,180,220,0.2)',border:'rgba(100,180,220,0.5)',color:'#80c8e8',magic:false},radiante:{label:'☀️ Radiante',bg:'rgba(240,220,80,0.2)',border:'rgba(240,220,80,0.5)',color:'#e8d060',magic:false},eletrico:{label:'⚡ Elétrico',bg:'rgba(180,140,240,0.2)',border:'rgba(180,140,240,0.5)',color:'#c8a8f0',magic:false},acido:{label:'🧪 Ácido',bg:'rgba(140,200,60,0.2)',border:'rgba(140,200,60,0.5)',color:'#a0d840',magic:false}};
+const QV_MAX=4;
+function initQV(){if(!S.qv)S.qv={open:false,charges:QV_MAX,usedCharges:0,dmgType:'perf',magicActive:false};renderQVPips();updateQVDisplay();if(S.qv.open){document.getElementById('qv-body').classList.add('open');document.getElementById('qv-chevron').classList.add('open');}}
+function toggleQV(){S.qv.open=!S.qv.open;document.getElementById('qv-body').classList.toggle('open',S.qv.open);document.getElementById('qv-chevron').classList.toggle('open',S.qv.open);sv();}
+function renderQVPips(){const max=QV_MAX;const used=S.qv.usedCharges||0;document.getElementById('qv-pips').innerHTML=Array.from({length:max},(_,i)=>`<div class="qv-pip ${i<used?'used':''}" onclick="toggleQVPip(${i})">${i+1}</div>`).join('');document.getElementById('qv-charges-left').textContent=max-used;document.getElementById('qv-charges-max').textContent=max;document.getElementById('qv-charge-stat').textContent=(max-used)+'/'+max;}
+function toggleQVPip(idx){const used=S.qv.usedCharges||0;S.qv.usedCharges=idx<used?idx:Math.min(idx+1,QV_MAX);if(S.qv.usedCharges>=QV_MAX)S.qv.magicActive=false;sv();renderQVPips();updateQVDisplay();toast('Cargas Quimera: '+(QV_MAX-S.qv.usedCharges)+'/'+QV_MAX);}
+function resetQVCharges(){S.qv.usedCharges=0;S.qv.magicActive=false;sv();renderQVPips();updateQVDisplay();toast('Quimera: cargas restauradas ao amanhecer ✓');}
+function selDmg(el,type,label){if(type!=='perf'&&!S.qv.magicActive){if(S.qv.usedCharges>=QV_MAX){toast('Sem cargas disponíveis!');return;}S.qv.usedCharges++;S.qv.magicActive=true;}if(type==='perf'&&S.qv.magicActive)S.qv.magicActive=false;S.qv.dmgType=type;sv();renderQVPips();updateQVDisplay();document.querySelectorAll('#qv-dmg-types .dt').forEach(d=>d.classList.remove('sel'));el.classList.add('sel');}
+function updateQVDisplay(){const t=QV_TYPES[S.qv.dmgType||'perf'];const isMagic=S.qv.magicActive;document.getElementById('qv-type-badge').textContent=t.label;const magicBadge=document.getElementById('qv-magic-badge');magicBadge.style.display=isMagic?'inline-flex':'none';const card=document.getElementById('qv-card');card.style.borderColor=isMagic?'rgba(127,119,221,0.5)':'rgba(226,75,74,0.35)';card.style.background=isMagic?'rgba(127,119,221,0.04)':'rgba(226,75,74,0.06)';const banner=document.getElementById('qv-active-banner');banner.style.display=isMagic?'block':'none';document.getElementById('qv-active-type').textContent=t.label;const dmgLabel=isMagic?'1d10+1 Mágico':'1d10+1';document.getElementById('qv-dmg-stat').textContent=dmgLabel;document.getElementById('qv-dmg-full').textContent=dmgLabel;const pill=document.getElementById('qv-dmg-pill');pill.textContent=t.label;pill.style.background=t.bg;pill.style.borderColor=t.border;pill.style.color=t.color;pill.style.border='.5px solid '+t.border;document.querySelectorAll('#qv-dmg-types .dt').forEach(d=>{const dtype=d.getAttribute('onclick').match(/'([^']+)'/)?.[1];d.classList.toggle('sel',dtype===S.qv.dmgType);});}
 
 // COINS
 const COIN_PO={pc:0.001,pp:0.01,pe:0.1,po:1,pl:10};
 const COIN_LABEL={pc:'PC',pp:'PP',pe:'PE',po:'PO',pl:'PL'};
 function saveCoin(type,val){S.coins[type]=parseInt(val)||0;sv();}
-function calcTotal(){
-  const c=S.coins;
-  const total=c.pl*10+c.po+c.pe*0.1+c.pp*0.01+c.pc*0.001;
-  const display=total>=1?total.toFixed(2)+' PO':((total*1000).toFixed(0))+' PC';
-  document.getElementById('total-po').textContent=total>=1?(Math.round(total*100)/100)+' PO':(Math.round(total*10000)/10)+' PP';
-}
-function runConv(){
-  const amt=parseFloat(document.getElementById('conv-amt').value)||0;
-  const from=document.getElementById('conv-from').value;
-  const to=document.getElementById('conv-to').value;
-  const rFrom=COIN_PO[from],rTo=COIN_PO[to];
-  const result=amt*rFrom/rTo;
-  const nice=result===Math.floor(result)?result.toString():result.toFixed(4).replace(/\.?0+$/,'');
-  document.getElementById('conv-result').textContent=nice+' '+COIN_LABEL[to];
-  document.getElementById('conv-formula').textContent=amt+' '+COIN_LABEL[from]+' × ('+rFrom+'/'+rTo+')';
-}
-function initCoins(){
-  if(!S.coins)S.coins={pc:0,pp:0,pe:0,po:0,pl:0};
-if(!S.undead)S.undead=JSON.parse(JSON.stringify(DEF_UNDEAD));
-if(!S.notes)S.notes=[];
-if(!S.qv)S.qv={open:false,charges:4,usedCharges:0,dmgType:"perf",magicActive:false};
-  ['pc','pp','pe','po','pl'].forEach(k=>{
-    const el=document.getElementById('c-'+k);
-    if(el)el.value=S.coins[k]||0;
-  });
-  calcTotal();
-}
+function calcTotal(){const c=S.coins;const total=c.pl*10+c.po+c.pe*0.1+c.pp*0.01+c.pc*0.001;document.getElementById('total-po').textContent=total>=1?(Math.round(total*100)/100)+' PO':(Math.round(total*10000)/10)+' PP';}
+function runConv(){const amt=parseFloat(document.getElementById('conv-amt').value)||0;const from=document.getElementById('conv-from').value;const to=document.getElementById('conv-to').value;const rFrom=COIN_PO[from],rTo=COIN_PO[to];const result=amt*rFrom/rTo;const nice=result===Math.floor(result)?result.toString():result.toFixed(4).replace(/\.?0+$/,'');document.getElementById('conv-result').textContent=nice+' '+COIN_LABEL[to];document.getElementById('conv-formula').textContent=amt+' '+COIN_LABEL[from]+' × ('+rFrom+'/'+rTo+')';}
+function initCoins(){if(!S.coins)S.coins={pc:0,pp:0,pe:0,po:0,pl:0};['pc','pp','pe','po','pl'].forEach(k=>{const el=document.getElementById('c-'+k);if(el)el.value=S.coins[k]||0;});calcTotal();}
 
 function init(){
   document.getElementById('in-hpmax').value=S.hpMax;
@@ -1813,10 +1711,7 @@ function init(){
   renderPips('pips-trans','trans',3,'used');
   renderPips('pips-spray','spray',3,'snake-used');
   renderPips('pips-sug','sug',3,'snake-used');
-  renderInv();
-  initCoins();
-  initQV();
-  initCMV();
+  renderInv();initCoins();initQV();initCMV();
 }
 init();
 </script>
